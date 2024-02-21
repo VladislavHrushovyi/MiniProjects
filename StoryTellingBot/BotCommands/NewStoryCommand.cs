@@ -1,24 +1,24 @@
-﻿using Telegram.Bot;
-using Telegram.Bot.Polling;
+﻿using StoryTellingBot.GptInterraction;
+using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace StoryTellingBot.BotCommands;
 
 public class NewStoryCommand(TelegramBotClient botClient) : ICommand
 {
+    private readonly GptClient _gptClient = new();
     private List<string> _answers = new();
     public async Task Handle(Message message, CancellationToken cts)
     {
         var chatId = message.Chat.Id;
-        var questions = Enumerable.Range(0, 10).ToArray(); // get this question from gpt
+        var answersString = await _gptClient.GetQuestionFromGpt();
+        var questions = answersString.Split("\n");
         var prevMessage = message.Text;
         foreach (var question in questions)
         {
             Message questionMessage = await botClient.SendTextMessageAsync(
                 chatId: chatId,
-                text: $"{question}: Question{question}",
+                text: question,
                 cancellationToken: cts);
             while (true)
             {
