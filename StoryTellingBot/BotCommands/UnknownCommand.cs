@@ -11,9 +11,9 @@ public class UnknownCommand(TelegramBotClient botClient) : ICommand
 
         Console.WriteLine($"Received a '{message.Text}' message in chat {chatId}.");
 
-        Message sentMessage = await botClient.SendTextMessageAsync(
-            chatId: chatId,
-            text: "Unknown command:\n" + message.Text,
-            cancellationToken: cts);
+        // Message sentMessage = await botClient.SendTextMessageAsync(
+        //     chatId: chatId,
+        //     text: "Unknown command:\n" + message.Text,
+        //     cancellationToken: cts);
     }
 }
