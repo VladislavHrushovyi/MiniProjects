@@ -48,7 +48,7 @@ public class TelegramBot
             return;
         if (message.Text is not { } messageText)
             return;
-
+        Console.WriteLine($"User: message={update.Message.Text} chatId={update.Message.Chat.Id} user={update.Message.Chat.Username}");
         var command = _commandHandler.HandleCommand(messageText, _botClient);
         
         await command.Handle(message, cts);
