@@ -55,6 +55,10 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_68E9976B76014415B73A74C04633C1FA }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_D2686D415C4A40FC82D7505F87F04330 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_0C11DA3796444FF1A9FF7AD11F9DF06F }}
+          
+      - name: Prepare .env file with project settings
+        run: echo "BOT_TOKEN=${{secrets.BOT_TOKEN}}" >> .env |
+            echo "OPEN_AI_TOKEN=${{secrets.OPEN_AI_TOKEN}}" >> .env
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
