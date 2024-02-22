@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   
   push:
-    branches: [ develop ]
+    branches: [ tgbot-story-telling ]
 
 env:
   WEBJOB_NAME: TgBotConsoleApp
