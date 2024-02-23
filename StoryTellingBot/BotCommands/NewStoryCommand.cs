@@ -37,7 +37,7 @@ public class NewStoryCommand(TelegramBotClient botClient) : ICommand
                 cancellationToken: cts);
             while (true)
             {
-                var newUpdates = await botClient.GetUpdatesAsync(offset:-1, cancellationToken: cts);
+                var newUpdates = await botClient.GetUpdatesAsync(offset: -1, cancellationToken: cts);
                 var currMessage = newUpdates[^1].Message.Text;
                 if (prevMessage != currMessage)
                 {
@@ -57,7 +57,7 @@ public class NewStoryCommand(TelegramBotClient botClient) : ICommand
         chatHistory.Add(new
         {
             Role="user",
-            Content=answersString+". Базуючись на цих відповідях, склади розповідь. не більше 1000 символів"
+            Content=answersString+". Базуючись на цих відповідях, склади розповідь. не більше 1200 символів"
         });
 
         var story = await _gptClient.GetQuestionFromGpt(chatHistory);
@@ -67,7 +67,7 @@ public class NewStoryCommand(TelegramBotClient botClient) : ICommand
             text: $"Генерується аудиозапис. \n {story}",
             cancellationToken: cts);
         var mp3Name = await _gptClient.GptTextToSpeech(story);
-        var streamMp3 = File.OpenRead($"./{mp3Name}");
+        await using var streamMp3 = File.OpenRead($"./{mp3Name}");
             
             
         var audioMessage = await botClient.SendAudioAsync(
