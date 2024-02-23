@@ -27,6 +27,7 @@ public class TelegramBot
             opt,
             cts.Token
             );
+        Console.ReadLine();
     }
 
     private Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cts)
