@@ -1,57 +1,57 @@
-﻿name: Build and deploy ASP.Net Core app to Azure Web App - for-my-first-cicda-pp
+﻿name: .NET Core
+
+env:
+  BINARIES: './mywebjob' 
+  ZIP_FILE: 'webjob.zip'
+  ZIP_PATH: './output'
+  ZIP_FILEPATH: './output/webjob.zip'
 
 on:
   push:
-    branches:
+    branches: 
       - tgbot-story-telling
-  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '8.x'
-          include-prerelease: true
+            dotnet-version: '8.x'
+            include-prerelease: true
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+      - name: Install dependencies
+        run: dotnet restore 
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      - name: Build
+        run: dotnet build --configuration Release --no-restore --output ${{env.BINARIES}}
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
+      - name: Zip
+        if: github.event_name != 'pull_request' # skip on PRs
+        uses: nguyenquyhy/zip-release@v0.3.0
         with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          filename: '${{env.ZIP_FILE}}'
+          workingDirectory:  ${{env.ZIP_PATH}}
+          exclusions: 'worker.exe app_data/**/unix/*' # skip .exe and Unix runtime as deployment will be to a Windows App Service
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v3
+      - name: Deploy to Test (develop branch) # skip on PRs
+        if: github.ref == 'refs/heads/develop' && github.event_name != 'pull_request' # skip on PRs, deploy develop branch to the test environment
+        uses: srijken/azure-zip-deploy@v1.0.1
         with:
-          name: .net-app
+          zip-file: ${{env.ZIP_FILEPATH}}
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE_TGBOT }}
 
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
+      - name: Deploy to Production (master branch)
+        if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request' # skip on PRs, deploy master branch to the production environment
+        uses: azure/webapps-deploy@v2
         with:
           app-name: 'story-telling-tgbot'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE_TGBOT }}
-          package: .
+          package: ${{env.ZIP_FILEPATH}}
+          publish-profile: ${{ secrets.WEBJOB_PUBLISH_PROFILE_PROD }}
           
       - name: Prepare .env file with project settings
         run: echo "BOT_TOKEN=${{secrets.BOT_TOKEN}}" >> .env |
