@@ -37,8 +37,7 @@ public class NewStoryCommand(TelegramBotClient botClient) : ICommand
                 cancellationToken: cts);
             while (true)
             {
-                var newUpdates = (await botClient.GetUpdatesAsync(offset:-1, cancellationToken: cts))
-                    .Where(x => x.Message.Chat.Id == message.Chat.Id).ToArray();
+                var newUpdates = await botClient.GetUpdatesAsync(offset: -1, cancellationToken: cts);
                 var currMessage = newUpdates[^1].Message.Text;
                 if (prevMessage != currMessage)
                 {

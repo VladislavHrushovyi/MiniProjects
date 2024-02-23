@@ -27,7 +27,6 @@ public class TelegramBot
             opt,
             cts.Token
             );
-        Console.ReadLine();
     }
 
     private Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cts)
@@ -43,15 +42,15 @@ public class TelegramBot
         return Task.CompletedTask;
     }
 
-    private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cts)
+    private Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cts)
     {
         if (update.Message is not { } message)
-            return;
+            return Task.CompletedTask;
         if (message.Text is not { } messageText)
-            return;
+            return Task.CompletedTask;
         Console.WriteLine($"User: message={update.Message.Text} chatId={update.Message.Chat.Id} user={update.Message.Chat.Username}");
         var command = _commandHandler.HandleCommand(messageText, _botClient);
         
-        await command.Handle(message, cts);
+        return Task.Run(() =>(command.Handle(message, cts)), cts);
     }
 }
