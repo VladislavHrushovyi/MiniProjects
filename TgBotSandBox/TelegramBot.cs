@@ -12,6 +12,7 @@ public class TelegramBot
 {
     private readonly TelegramBotClient _botClient = new(ProjectSettings.SettingsVars["BOT_TOKEN"]);
     private readonly CommandFactory _commandHandler = new ();
+    private readonly List<Task> _commandsQueue = new();
 
     public Task StartBot()
     {
@@ -19,7 +20,8 @@ public class TelegramBot
 
         ReceiverOptions opt = new ReceiverOptions()
         {
-            AllowedUpdates = Array.Empty<UpdateType>(),
+            //AllowedUpdates = Array.Empty<UpdateType>(),
+            AllowedUpdates = new [] { UpdateType.Message }
         };
         
         _botClient.StartReceiving(
@@ -32,6 +34,17 @@ public class TelegramBot
         return Task.CompletedTask;
     }
 
+    private Task CommandQueueExecution()
+    {
+        while (true)
+        {
+            var completeCommands = _commandsQueue.Where(x => x.IsCompleted);
+            foreach (var completeCommand in completeCommands)
+            {
+                _commandsQueue.Remove(completeCommand);
+            }
+        }
+    }
     private Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cts)
     {
         var errorMessage = exception switch
@@ -53,7 +66,9 @@ public class TelegramBot
             return Task.CompletedTask;
         Console.WriteLine($"User: message={update.Message.Text} chatId={update.Message.Chat.Id} user={update.Message.Chat.Username}");
         var command = _commandHandler.HandleCommand(messageText, _botClient);
+        var commandTask = command.Handle(message, cts);
+        _commandsQueue.Add(commandTask);
         
-        return Task.Run(() =>(command.Handle(message, cts)), cts);
+        return Task.CompletedTask;
     }
 }
