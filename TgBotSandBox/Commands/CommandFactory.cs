@@ -5,7 +5,7 @@ namespace TgBotSandBox.Commands;
 
 public class CommandFactory
 {
-    public ICommand HandleCommand(string text, TelegramBotClient botClient )
+    public static ICommand HandleCommand(string text, TelegramBotClient botClient )
     {
         return text switch
         {
