@@ -1,6 +1,8 @@
-﻿namespace TgBotSandBox.Repository.Models;
+﻿using Telegram.Bot.Types;
+
+namespace TgBotSandBox.Repository.Models;
 
 public interface ICommandState
 {
-    Task Handle(int charId, string message);
+    Task Handle(Message message, CancellationToken cts);
 }

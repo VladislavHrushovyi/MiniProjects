@@ -6,11 +6,13 @@ namespace TgBotSandBox.Commands;
 
 public class TextMessageCommand(IChatRepository chatRepository) : ICommand
 {
-    public Task Handle(Message message, CancellationToken cts)
+    public async Task Handle(Message message, CancellationToken cts)
     {
-        //get chat state by chatId
-        // call state handle
-        
-        return Task.CompletedTask;
+        var chatState = await chatRepository.GetChatStateByChatId(message.Chat.Id.ToString())!;
+        if (chatState is null)
+        {
+            return;
+        }
+        await chatState.Handle(message, cts);
     }
 }

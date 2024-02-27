@@ -52,7 +52,18 @@ public class TelegramBot
             return;
         Console.WriteLine($"User: message={update.Message.Text} chatId={update.Message.Chat.Id} user={update.Message.Chat.Username}");
         var command = CommandFactory.HandleCommand(messageText, _botClient);
-        
-        await command.Handle(message, cts);
+        try
+        {
+            await command.Handle(message, cts);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            await _botClient.SendTextMessageAsync(
+                message.Chat.Id,
+                messageText,
+                cancellationToken:cts
+                );
+        }
     }
 }

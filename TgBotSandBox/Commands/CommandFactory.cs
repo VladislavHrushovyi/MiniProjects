@@ -12,7 +12,7 @@ public abstract class CommandFactory
         return text switch
         {
             "/long_time_command" => new LongTermCommand(botClient, _chatRepository),
-            _ => new UnknownCommand(botClient)
+            _ => new TextMessageCommand(_chatRepository)
         };
     }
 }
