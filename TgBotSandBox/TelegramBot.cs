@@ -11,7 +11,6 @@ namespace TgBotSandBox;
 public class TelegramBot
 {
     private readonly TelegramBotClient _botClient = new(ProjectSettings.SettingsVars["BOT_TOKEN"]);
-    private readonly List<Task> _commandsQueue = new();
 
     public Task StartBot()
     {
@@ -45,17 +44,15 @@ public class TelegramBot
         return Task.CompletedTask;
     }
 
-    private Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cts)
+    private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cts)
     {
         if (update.Message is not { } message)
-            return Task.CompletedTask;
+            return;
         if (message.Text is not { } messageText)
-            return Task.CompletedTask;
+            return;
         Console.WriteLine($"User: message={update.Message.Text} chatId={update.Message.Chat.Id} user={update.Message.Chat.Username}");
         var command = CommandFactory.HandleCommand(messageText, _botClient);
-        var commandTask = command.Handle(message, cts);
-        _commandsQueue.Add(commandTask);
         
-        return Task.CompletedTask;
+        await command.Handle(message, cts);
     }
 }

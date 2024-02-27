@@ -1,10 +1,42 @@
-﻿namespace TgBotSandBox.Repository;
+﻿using TgBotSandBox.Repository.Models;
 
-public class ChatRepository
+namespace TgBotSandBox.Repository;
+
+public class ChatRepository : IChatRepository
 {
-    // dict<string(chatId), ICommandState>
+    private readonly Dictionary<string, ICommandState> _chatStates = new();
     
-    // init record to dict
-    
-    // update state by chatId(ICommandState)
+    public Task InitCommandState(string chatId, ICommandState state)
+    {
+        if (_chatStates.ContainsKey(chatId))
+        {
+            _chatStates[chatId] = state;
+            return Task.CompletedTask;
+        }
+        
+        _chatStates.Add(chatId, state);
+        
+        return Task.CompletedTask;
+    }
+
+    public Task UpdateCommandState(string chatId, ICommandState state)
+    {
+        if (!_chatStates.ContainsKey(chatId)) 
+            return Task.CompletedTask;
+        
+        _chatStates[chatId] = state;
+        
+        return Task.CompletedTask;
+
+    }
+
+    public Task<ICommandState> GetChatStateByChatId(string chatId)
+    {
+        if (_chatStates.TryGetValue(chatId, out var state))
+        {
+            return Task.FromResult(state);
+        }
+
+        throw new KeyNotFoundException($"ChatId {chatId} does not exist");
+    }
 }
