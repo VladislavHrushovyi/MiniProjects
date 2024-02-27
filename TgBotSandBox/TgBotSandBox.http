@@ -1,0 +1,6 @@
+@TgBotSandBox_HostAddress = http://localhost:5267
+
+GET {{TgBotSandBox_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

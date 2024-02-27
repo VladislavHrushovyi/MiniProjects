@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoryTellingBot", "StoryTel
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TgBotWeb", "TgBotWeb\TgBotWeb.csproj", "{ABFD8BB2-887C-4A16-8A07-826632E27BA6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TgBotSandBox", "TgBotSandBox\TgBotSandBox.csproj", "{9DBC2C30-970D-4EAF-9438-AB9565313EBB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{ABFD8BB2-887C-4A16-8A07-826632E27BA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABFD8BB2-887C-4A16-8A07-826632E27BA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABFD8BB2-887C-4A16-8A07-826632E27BA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DBC2C30-970D-4EAF-9438-AB9565313EBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DBC2C30-970D-4EAF-9438-AB9565313EBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DBC2C30-970D-4EAF-9438-AB9565313EBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DBC2C30-970D-4EAF-9438-AB9565313EBB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
