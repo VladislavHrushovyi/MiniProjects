@@ -1,9 +1,10 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Newtonsoft.Json.Linq;
+using StoryTellingBot.Repository.Models;
 using File = System.IO.File;
 
-namespace StoryTellingBot.GptInterraction;
+namespace StoryTellingBot.GptInteraction;
 
 public class GptClient
 {
@@ -16,7 +17,7 @@ public class GptClient
             new AuthenticationHeaderValue("Bearer", ProjectSettings.SettingsVars["OPEN_AI_TOKEN"]);
     }
 
-    public async Task<string> GetQuestionFromGpt(List<object> messages)
+    public async Task<string> AskInGpt(List<ChatItem> messages)
     {
         string url = "https://api.openai.com/v1/chat/completions";
         
@@ -32,7 +33,7 @@ public class GptClient
         return message;
     }
 
-    public async Task<string> GptTextToSpeech(string text)
+    public async Task<string> GptTextToSpeech(string fileName, string text)
     {
         string textToSpeechEndpoint = "https://api.openai.com/v1/audio/speech";
         HttpResponseMessage result = await _httpClient.PostAsJsonAsync(textToSpeechEndpoint, new
@@ -44,7 +45,7 @@ public class GptClient
         });
 
         var mp3Bytes = await result.Content.ReadAsByteArrayAsync();
-        await File.WriteAllBytesAsync("./audio.mp3", mp3Bytes);
-        return "audio.mp3";
+        await File.WriteAllBytesAsync($"./{fileName}.mp3", mp3Bytes);
+        return $"{fileName}.mp3";
     }
 }
