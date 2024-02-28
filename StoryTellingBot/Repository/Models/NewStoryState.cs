@@ -68,7 +68,7 @@ public class NewStoryState(ITelegramBotClient botClient, IEnumerable<string> que
         {
             new(
                 "user",
-                "Напиши 10 простих запитань до розповіді, щоб за відповідями можна було створити розповідь. Питання можуть містити шутливу форму"
+                "Напиши 10 унікальних запитань до розповіді, щоб за відповідями можна було створити розповідь. Питання можуть містити жартівливу форму і трансгендерів"
             ),
             new(
                 "assistant",
@@ -76,7 +76,7 @@ public class NewStoryState(ITelegramBotClient botClient, IEnumerable<string> que
             ),
             new(
                 "user",
-                "Базуючись на цих відповідях в шутливій формі напиши розповідь\n"+string.Join("\n", _questionAnswersPairs.Select(x => x.Value))
+                "Базуючись на цих відповідях в шутливій формі напиши розповідь не більше чим 1500 символів\n"+string.Join("\n", _questionAnswersPairs.Select(x => x.Value))
             )
         };
         return result;
