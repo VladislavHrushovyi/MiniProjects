@@ -10,9 +10,8 @@ namespace StoryTellingBot;
 public class TelegramBot
 {
     private readonly TelegramBotClient _botClient = new(ProjectSettings.SettingsVars["BOT_TOKEN"]);
-    private readonly CommandHandler _commandHandler = new ();
 
-    public async Task StartBot()
+    public Task StartBot()
     {
         using var cts = new CancellationTokenSource();
 
@@ -27,6 +26,8 @@ public class TelegramBot
             opt,
             cts.Token
             );
+        
+        return Task.CompletedTask;
     }
 
     private Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cts)
@@ -49,8 +50,21 @@ public class TelegramBot
         if (message.Text is not { } messageText)
             return Task.CompletedTask;
         Console.WriteLine($"User: message={update.Message.Text} chatId={update.Message.Chat.Id} user={update.Message.Chat.Username}");
-        var command = _commandHandler.HandleCommand(messageText, _botClient);
+        var command = CommandFactory.GetCommandHandler(messageText, _botClient);
         
-        return Task.Run(() =>(command.Handle(message, cts)), cts);
+        try
+        {
+            command.Handle(message, cts);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            _botClient.SendTextMessageAsync(
+                message.Chat.Id,
+                e.Message,
+                cancellationToken:cts
+            );
+        }
+        return Task.CompletedTask;
     }
 }
