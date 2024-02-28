@@ -1,10 +1,12 @@
 ﻿using Telegram.Bot;
 using Telegram.Bot.Types;
+using TgBotSandBox.SenderRequest;
 
 namespace TgBotSandBox.Repository.Models;
 
 public class NewStoryState(ITelegramBotClient botClient, IEnumerable<string> questions) : ICommandState
 {
+    private readonly FetchingSomeData _fetchingSomeData = new();
     private readonly Dictionary<string, string> _questionAnswersPairs = questions.ToDictionary(x => x, _ => string.Empty);
     public async Task Handle(Message message, CancellationToken cts)
     {
@@ -34,7 +36,7 @@ public class NewStoryState(ITelegramBotClient botClient, IEnumerable<string> que
             "Генерується розповідь",
             cancellationToken:cts);
 
-        await Task.Delay(10000, cts);
+        await _fetchingSomeData.FetchSomeData();
         var answers = _questionAnswersPairs.Select(x => x.Value);
         await botClient.SendTextMessageAsync(
             chatId,
@@ -46,7 +48,7 @@ public class NewStoryState(ITelegramBotClient botClient, IEnumerable<string> que
             "Генерується аудіо файл",
             cancellationToken:cts);
 
-        await Task.Delay(7000, cts);
+        await _fetchingSomeData.FetchSomeData();
         await botClient.SendTextMessageAsync(
             chatId,
             "Згенерований .mp3",

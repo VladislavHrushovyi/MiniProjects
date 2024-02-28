@@ -44,26 +44,27 @@ public class TelegramBot
         return Task.CompletedTask;
     }
 
-    private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cts)
+    private Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cts)
     {
         if (update.Message is not { } message)
-            return;
+            return Task.CompletedTask;
         if (message.Text is not { } messageText)
-            return;
+            return Task.CompletedTask;
         Console.WriteLine($"User: message={update.Message.Text} chatId={update.Message.Chat.Id} user={update.Message.Chat.Username}");
         var command = CommandFactory.HandleCommand(messageText, _botClient);
         try
         {
-            await command.Handle(message, cts);
+            command.Handle(message, cts);
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
-            await _botClient.SendTextMessageAsync(
+            _botClient.SendTextMessageAsync(
                 message.Chat.Id,
-                messageText,
+                e.Message,
                 cancellationToken:cts
                 );
         }
+        return Task.CompletedTask;
     }
 }
