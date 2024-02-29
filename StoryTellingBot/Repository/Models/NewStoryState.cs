@@ -47,7 +47,7 @@ public class NewStoryState(ITelegramBotClient botClient, IEnumerable<string> que
         
         await botClient.SendTextMessageAsync(
             chatId,
-            storyText[..50] + "...",
+            storyText,
             cancellationToken:cts);
         await botClient.SendTextMessageAsync(
             chatId,
@@ -68,7 +68,9 @@ public class NewStoryState(ITelegramBotClient botClient, IEnumerable<string> que
         {
             new(
                 "user",
-                "Напиши 10 унікальних запитань до розповіді, щоб за відповідями можна було створити розповідь. Питання можуть містити жартівливу форму і трансгендерів"
+                "Напиши 10 унікальних запитань до розповіді, щоб за відповідями можна було створити розповідь. " +
+                "Питання можуть містити жартівливу форму і матюки. " +
+                "Притворися дорослою та невихованою людиною, яка може використовувати нецензурну лексику як сенс життя"
             ),
             new(
                 "assistant",
@@ -76,7 +78,8 @@ public class NewStoryState(ITelegramBotClient botClient, IEnumerable<string> que
             ),
             new(
                 "user",
-                "Базуючись на цих відповідях в шутливій формі напиши розповідь не більше чим 1500 символів\n"+string.Join("\n", _questionAnswersPairs.Select(x => x.Value))
+                "Базуючись на цих відповідях в шутливій формі напиши розповідь не більше чим 1200 символів" +
+                "не ігноруй нецензурну лексику, так розповідь буде яскравішою і більш точно передавати настрій\n"+string.Join("\n", _questionAnswersPairs.Select(x => x.Value))
             )
         };
         return result;
