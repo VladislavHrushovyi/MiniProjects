@@ -45,7 +45,7 @@ public class NewStoryState(ITelegramBotClient botClient) : ICommandState
             .Where(x => x.Value == string.Empty)
             .ToDictionary();
         
-        if (message.Text == _storyTheme)
+        if (message.Text == _storyTheme || message.Text == "0")
         {
             var kvp = nonAnsweredQuestion.First();
             await botClient.SendTextMessageAsync(
