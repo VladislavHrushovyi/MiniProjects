@@ -35,12 +35,13 @@ public class GptClient
 
     public async Task<string> GptTextToSpeech(string fileName, string text)
     {
+        var voices = new string[] { "alloy", "echo", "fable", "onyx", "nova", "shimmer" };
         string textToSpeechEndpoint = "https://api.openai.com/v1/audio/speech";
         HttpResponseMessage result = await _httpClient.PostAsJsonAsync(textToSpeechEndpoint, new
         {
             Model = "tts-1",
             Input = text,
-            Voice = "onyx"
+            Voice = voices[Random.Shared.Next(5)]
             
         });
 
