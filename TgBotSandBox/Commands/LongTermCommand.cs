@@ -10,13 +10,12 @@ public class LongTermCommand(ITelegramBotClient botClient, IChatRepository chatR
 {
     public async Task Handle(Message message, CancellationToken cts)
     {
-        await botClient.SendTextMessageAsync(message.Chat.Id, "Очікуйте. Генеруються питання", cancellationToken:cts);
-        await Task.Delay(5000, cts);
-        var questions = Enumerable.Range(0, 10).Select(x => $"Question{x}");
+        var chatId = message.Chat.Id;
+        await chatRepository.InitCommandState(chatId.ToString(), new NewStoryState(botClient));
         
-        var longTermState = new NewStoryState(botClient, questions);
-        await chatRepository.InitCommandState(message.Chat.Id.ToString(), longTermState);
-        
-        await botClient.SendTextMessageAsync(message.Chat.Id,questions.First() , cancellationToken:cts); 
+        await botClient.SendTextMessageAsync(
+            chatId: message.Chat.Id,
+            text: "Введіть тему розповіді. Для випадкової просто відправте 0",
+            cancellationToken: cts);
     }
 }

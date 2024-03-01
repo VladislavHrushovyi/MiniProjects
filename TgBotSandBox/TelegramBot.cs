@@ -3,7 +3,6 @@ using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 using TgBotSandBox.Commands;
 
 namespace TgBotSandBox;
@@ -18,8 +17,7 @@ public class TelegramBot
 
         ReceiverOptions opt = new ReceiverOptions()
         {
-            //AllowedUpdates = Array.Empty<UpdateType>(),
-            AllowedUpdates = new [] { UpdateType.Message }
+            //AllowedUpdates = Array.Empty<UpdateType>()
         };
         
         _botClient.StartReceiving(
@@ -46,10 +44,12 @@ public class TelegramBot
 
     private Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cts)
     {
+        Console.WriteLine(update.CallbackQuery?.Data);
         if (update.Message is not { } message)
             return Task.CompletedTask;
         if (message.Text is not { } messageText)
             return Task.CompletedTask;
+            
         Console.WriteLine($"User: message={update.Message.Text} chatId={update.Message.Chat.Id} user={update.Message.Chat.Username}");
         var command = CommandFactory.HandleCommand(messageText, _botClient);
         try
