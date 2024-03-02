@@ -11,6 +11,7 @@ public class CommandFactory
         return text switch
         {
             "/new_story" => new NewStoryCommand(botClient, _chatRepository),
+            "/text_to_speech" => new TextToSpeechCommand(botClient, _chatRepository),
             _ => new TextMessageCommand(_chatRepository)
         };
     }
