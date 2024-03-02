@@ -5,7 +5,7 @@
 
 # dotenv files
 .env
-
+*.mp3
 # User-specific files
 *.rsuser
 *.suo

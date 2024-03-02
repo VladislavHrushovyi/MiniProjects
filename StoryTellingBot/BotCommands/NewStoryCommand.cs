@@ -11,18 +11,12 @@ public class NewStoryCommand(ITelegramBotClient botClient, IChatRepository chatR
     private readonly GptClient _gptClient = new();
     public async Task Handle(Message message, CancellationToken cts)
     {
-        await botClient.SendTextMessageAsync(message.Chat.Id, "Очікуйте. Генеруються питання", cancellationToken:cts);
-        var questionString = await _gptClient.AskInGpt(new List<ChatItem>()
-        {
-            new(
-                "user",
-                "Напиши 10 простих запитань до розповіді, щоб за відповідями можна було створити розповідь. Питання можуть містити шутливу форму")
-        });
-        var questions = questionString.Split("\n");
+        var chatId = message.Chat.Id;
+        await chatRepository.InitCommandState(chatId.ToString(), new NewStoryState(botClient));
         
-        var longTermState = new NewStoryState(botClient, questions);
-        await chatRepository.InitCommandState(message.Chat.Id.ToString(), longTermState);
-        
-        await botClient.SendTextMessageAsync(message.Chat.Id,questions.First() , cancellationToken:cts); 
+        await botClient.SendTextMessageAsync(
+            chatId: message.Chat.Id,
+            text: "Введіть тему розповіді. Для випадкової просто відправте 0",
+            cancellationToken: cts); 
     }
 }
