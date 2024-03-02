@@ -10,7 +10,7 @@ public class TextToSpeechCommand(ITelegramBotClient botClient, IChatRepository c
     public async Task Handle(Message message, CancellationToken cts)
     {
         var state = new TextToSpeechState(botClient);
-
+        await chatRepository.InitCommandState(message.Chat.Id.ToString(), state);
         await botClient.SendTextMessageAsync(
             chatId: message.Chat.Id,
             text: "Очікую на ваший текст =)",
