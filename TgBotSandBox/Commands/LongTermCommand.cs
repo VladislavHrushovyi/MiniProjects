@@ -11,11 +11,11 @@ public class LongTermCommand(ITelegramBotClient botClient, IChatRepository chatR
     public async Task Handle(Message message, CancellationToken cts)
     {
         var chatId = message.Chat.Id;
-        await chatRepository.InitCommandState(chatId.ToString(), new NewStoryState(botClient));
+        await chatRepository.InitCommandState(chatId.ToString(), new ImageCreationState(botClient));
         
         await botClient.SendTextMessageAsync(
             chatId: message.Chat.Id,
-            text: "Введіть тему розповіді. Для випадкової просто відправте 0",
+            text: "очікую опис для картинки",
             cancellationToken: cts);
     }
 }
