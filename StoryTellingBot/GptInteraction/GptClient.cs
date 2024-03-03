@@ -49,4 +49,23 @@ public class GptClient
         await File.WriteAllBytesAsync($"./{fileName}.mp3", mp3Bytes);
         return $"{fileName}.mp3";
     }
+
+    public async Task<string> CreateImage(string imageDescription)
+    {
+        string imageCreationEndpoint = "https://api.openai.com/v1/images/generations";
+        
+        HttpResponseMessage result = await _httpClient.PostAsJsonAsync(imageCreationEndpoint, new
+        {
+            Model = "dall-e-3",
+            Prompt = imageDescription,
+            N = 1,
+            Size = "1024x1024"
+        });
+        
+        var responseString = await result.Content.ReadAsStringAsync();
+        var choices = JObject.Parse(responseString)["data"];
+        var imageUrl = choices.ToArray()[0]["url"].Value<string>();
+        
+        return imageUrl;
+    }
 }
