@@ -3,7 +3,7 @@ using Telegram.Bot;
 
 namespace StoryTellingBot.BotCommands;
 
-public class CommandFactory
+public static class CommandFactory
 {
     private static readonly IChatRepository _chatRepository = new ChatRepository();
     public static ICommand GetCommandHandler(string text, TelegramBotClient botClient )
@@ -12,6 +12,7 @@ public class CommandFactory
         {
             "/new_story" => new NewStoryCommand(botClient, _chatRepository),
             "/text_to_speech" => new TextToSpeechCommand(botClient, _chatRepository),
+            "/create_image" => new CreateImageCommand(botClient, _chatRepository),
             _ => new TextMessageCommand(_chatRepository)
         };
     }
