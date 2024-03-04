@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TgBotWeb", "TgBotWeb\TgBotW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TgBotSandBox", "TgBotSandBox\TgBotSandBox.csproj", "{9DBC2C30-970D-4EAF-9438-AB9565313EBB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlgorithmTasks", "AlgorithmTasks\AlgorithmTasks.csproj", "{C0DB983D-0978-459A-8613-2641D68CC4DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{9DBC2C30-970D-4EAF-9438-AB9565313EBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DBC2C30-970D-4EAF-9438-AB9565313EBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DBC2C30-970D-4EAF-9438-AB9565313EBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0DB983D-0978-459A-8613-2641D68CC4DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0DB983D-0978-459A-8613-2641D68CC4DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0DB983D-0978-459A-8613-2641D68CC4DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0DB983D-0978-459A-8613-2641D68CC4DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
