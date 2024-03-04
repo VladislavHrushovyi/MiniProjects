@@ -1,3 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using AlgorithmTasks;
 
-Console.WriteLine("Hello, World!");
+var evWalk = new EveningWalk();
+evWalk.StartTasks();
