@@ -45,12 +45,12 @@ public class TelegramBot
 
     private Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cts)
     {
-        _botClient.SendTextMessageAsync(
-            update.Message.Chat.Id,
-            "Кінчились гроші, просіть розробника шоб він закинув грошей на іскуствєнні інтілєкти",
-            cancellationToken:cts
-        );
-        return Task.CompletedTask;
+        // _botClient.SendTextMessageAsync(
+        //     update.Message.Chat.Id,
+        //     "Кінчились гроші, просіть розробника шоб він закинув грошей на іскуствєнні інтілєкти",
+        //     cancellationToken:cts
+        // );
+        // return Task.CompletedTask;
         if (update.Message is not { } message)
             return Task.CompletedTask;
         if (message.Text is not { } messageText)
