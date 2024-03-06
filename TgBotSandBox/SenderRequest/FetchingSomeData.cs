@@ -4,6 +4,11 @@ public class FetchingSomeData
 {
     public async Task FetchSomeData()
     {
-        await Task.Delay(5000);
+        await Task.Delay(50);
+        if (Random.Shared.Next(3) == 2)
+        {
+            throw new Exception("Деякий чутливий контент");
+        }
+        
     }
 }
