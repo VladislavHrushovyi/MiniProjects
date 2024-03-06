@@ -26,7 +26,18 @@ public class NewStoryState(ITelegramBotClient botClient) : ICommandState
                     chatId,
                     "Генеруються питання",
                     cancellationToken:cts);
-                await _fetchingSomeData.FetchSomeData();
+                try
+                {
+                    await _fetchingSomeData.FetchSomeData();
+                }
+                catch (Exception e)
+                {
+                    await botClient.SendTextMessageAsync(
+                        chatId,
+                        e.Message,
+                        cancellationToken:cts);
+                    throw;
+                }
                 var question = Enumerable.Range(0, 10).Select(i => $"Question{i}");
                 _questionAnswersPairs = question.ToDictionary(x => x, _ => string.Empty);
             }
