@@ -15,12 +15,23 @@ public class CreateImageState(ITelegramBotClient botClient) : ICommandState
                 text: "Очікуйте, роблю картинку",
                 cancellationToken: cts
             );
-        var imageUrl = await _gptClient.CreateImage(message.Text);
 
-        await botClient.SendPhotoAsync(
-            chatId: chatId,
-            InputFile.FromUri(imageUrl),
-            cancellationToken: cts
-        );
+        try
+        {
+            var imageUrl = await _gptClient.CreateImage(message.Text);
+            await botClient.SendPhotoAsync(
+                chatId: chatId,
+                InputFile.FromUri(imageUrl),
+                cancellationToken: cts
+            );
+        }
+        catch (Exception e)
+        {
+            await botClient.SendTextMessageAsync(
+                chatId: chatId,
+                text: e.Message,
+                cancellationToken: cts
+            );
+        }
     }
 }
