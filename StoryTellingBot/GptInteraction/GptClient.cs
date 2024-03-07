@@ -63,8 +63,12 @@ public class GptClient
         });
         
         var responseString = await result.Content.ReadAsStringAsync();
-        var choices = JObject.Parse(responseString)["data"];
-        var imageUrl = choices.ToArray()[0]["url"].Value<string>();
+        var responseBody = JObject.Parse(responseString)["data"];
+        if (responseBody == null)
+        {
+            throw new Exception(responseBody["error"]["message"].Value<string>());
+        }
+        var imageUrl = responseBody.ToArray()[0]["url"].Value<string>();
         
         return imageUrl;
     }
