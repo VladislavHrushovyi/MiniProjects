@@ -29,7 +29,7 @@ public class CreateImageState(ITelegramBotClient botClient) : ICommandState
         {
             await botClient.SendTextMessageAsync(
                 chatId: chatId,
-                text: e.Message,
+                text: "Не припустимий контент опису картинки. Порушення чутливого контенту",
                 cancellationToken: cts
             );
         }
