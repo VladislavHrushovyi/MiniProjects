@@ -13,30 +13,14 @@ public class EveningWalk
         Console.WriteLine(minSumOfGrivnya);
     }
 
-    private long FindLowestAmountOfGrivnya(long a, long b, long c)
+    private static long FindLowestAmountOfGrivnya(long a, long b, long c)
     {
-        long x = 1;
-        long delta = 0;
-
-        while (true)
+        long sum = a * c;
+        while (sum / a - sum / b != c)
         {
-            long left = x / a - x / b;
-            long right = c;
-
-            if (left - right > c)
-            {
-                return x;
-            }
-
-            if (left - right > delta)
-            {
-                delta = left - right;
-                x++;
-            }
-            else
-            {
-                x += delta - (left - right);
-            }
+            sum += a;
         }
+
+        return sum;
     }
 }
