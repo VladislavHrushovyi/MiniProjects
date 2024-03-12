@@ -15,7 +15,7 @@ public class EveningWalk
         Console.WriteLine($"CASE 2: a=600000 b=700000 c=800000 X={case2}");
         
         var case21 = FindLowestAmountOfGrivnya(1, 999999, 999999);
-        Console.WriteLine($"CASE 2: a=600000 b=700000 c=800000 X={case21}");
+        Console.WriteLine($"CASE 2.1: a=1 b=700000 c=999999 X={case21}");
 
         var case3 = FindLowestAmountOfGrivnya(999998, 999999, 999999);
         Console.WriteLine($"CASE 3: a=999998 b=999999 c=999999 X={case3}");
@@ -23,32 +23,18 @@ public class EveningWalk
 
     private static long FindLowestAmountOfGrivnya(long a, long b, long c)
     {
-        // long minAmountDollars = c;
-        // long spendMoney;
-        // while (true)
-        // {
-        //     spendMoney = minAmountDollars * a;
-        //     long euros = spendMoney / b;
-        //     if (minAmountDollars % euros == c)
-        //     {
-        //         break;
-        //     }
-        //
-        //     minAmountDollars += minAmountDollars / euros;
-        // }
-        //
-        // return spendMoney;
-        var minDollars = c;
+        var spendMoney = a * c;
+        var tmpSum = spendMoney;
         while (true)
         {
-            var euros = (minDollars * a) / b;
-            if (minDollars - euros == c)
-            {
-                return minDollars * a;
-            }
-        
-            minDollars += b / a;
+            var euros = tmpSum / b;
+            var dollarsResult = euros * a;
+            tmpSum = tmpSum % b + dollarsResult;
+            spendMoney += dollarsResult;
+            if(euros == 0) break;
         }
+
+        return spendMoney;
     }
     
 }
