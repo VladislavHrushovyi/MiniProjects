@@ -23,18 +23,27 @@ public class EveningWalk
 
     private static long FindLowestAmountOfGrivnya(long a, long b, long c)
     {
-        var spendMoney = a * c;
-        var tmpSum = spendMoney;
-        while (true)
-        {
-            var euros = tmpSum / b;
-            var dollarsResult = euros * a;
-            tmpSum = tmpSum % b + dollarsResult;
-            spendMoney += dollarsResult;
-            if(euros == 0) break;
-        }
+        // var spendMoney = a * c;
+        // var tmpSum = spendMoney;
+        // while (true)
+        // {
+        //     var euros = tmpSum / b;
+        //     var dollarsResult = euros * a;
+        //     tmpSum = tmpSum % b + dollarsResult;
+        //     spendMoney += dollarsResult;
+        //     if(euros == 0) break;
+        // }
+        //
+        // return spendMoney;
+        var dollars = c;
+        var euro = dollars * a / b;
 
-        return spendMoney;
+        while (dollars - euro != c)
+        {
+            dollars += 1; // this must be change more another way
+            euro = dollars * a / b;
+        }
+        return dollars * a;
     }
     
 }
