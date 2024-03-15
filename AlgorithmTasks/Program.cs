@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks;
 
-var evWalk = new EveningWalk();
-evWalk.StartTasks();
+var addTwoNumbers = new AddTwoNumbers();
+addTwoNumbers.Execute();
