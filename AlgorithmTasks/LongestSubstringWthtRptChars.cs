@@ -15,29 +15,32 @@ partial class Solution
 {
     public int LengthOfLongestSubstring(string s)
     {
-        if (s == "")
+        if (s.Length < 2)
         {
-            return 0;
+            return s.Length;
         }
-        if (string.IsNullOrEmpty(s) || string.IsNullOrWhiteSpace(s) || s.Length == 1)
+
+        int maxLength = 0;
+        int k = 0;
+        int count = 0;
+
+        for (int i = 1; i < s.Length; i++)
         {
-            return 1;
-        }
-        int maxSubstr = 0;
-        var subItems = new List<char>();
-        for (int i = 0; i < s.Length; i++)
-        {
-            for (int j = i; j < s.Length; j++)
+            for (int j = k; j < i; j++)
             {
-                if (subItems.Contains(s[j]))
+                if (s[i] == s[j])
                 {
-                    maxSubstr = subItems.Count > maxSubstr ? subItems.Count : maxSubstr;
-                    subItems.Clear();
-                    break;
+                    k = j + 1;
                 }
-                subItems.Add(s[j]);
+            }
+
+            count = i - k + 1;
+            if (count > maxLength)
+            {
+                maxLength = count;
             }
         }
-        return maxSubstr;
+
+        return maxLength;
     }
 }
