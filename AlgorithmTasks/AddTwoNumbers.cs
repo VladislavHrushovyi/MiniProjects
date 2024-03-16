@@ -46,7 +46,7 @@ public class AddTwoNumbers
          this.Next = next;
     }
  }
-public class Solution 
+partial class Solution 
 {
     public ListNode AddTwoNumbers(ListNode l1, ListNode l2, int remainder = 0) 
     {

@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks;
 
-var addTwoNumbers = new AddTwoNumbers();
-addTwoNumbers.Execute();
+var maxSubstring = new LongestSubstringWthtRptChars();
+maxSubstring.Execute();
