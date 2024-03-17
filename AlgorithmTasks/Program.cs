@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks;
 
-var maxSubstring = new LongestSubstringWthtRptChars();
-maxSubstring.Execute();
+var longestPalindrome = new LongestPalindrome();
+longestPalindrome.Execute();
