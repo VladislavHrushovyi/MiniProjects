@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks;
 
-var evWalk = new EveningWalk();
-evWalk.StartTasks();
+var longestPalindrome = new LongestPalindrome();
+longestPalindrome.Execute();
