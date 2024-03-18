@@ -5,7 +5,7 @@ public class LongestPalindrome
     public void Execute()
     {
         var solution = new Solution();
-        var result = solution.LongestPalindrome("babad");
+        var result = solution.LongestPalindrome("aaccdd");
         Console.WriteLine(result);
     }
 }
@@ -18,72 +18,42 @@ public partial class Solution {
             return s;
         }
 
-        if (s.Length == 2)
-        {
-            if (s[0] != s[1])
-            {
-                return $"{s[0]}";   
-            }
-        }
+        int start = 0;
+        int resultLengts = 0;
 
-        if (s.ToCharArray().ToHashSet().Count == 1)
-        {
-            return s;
-        }
-        var result = string.Empty;
         for (int i = 0; i < s.Length; i++)
         {
-            var leftChar = s[i];
-            var leftIndex = i;
+            int left = i;
+            int right = i;
 
-            if (leftIndex + 1 > s.Length - 1)
+            while (left >= 0 && right < s.Length && s[left] == s[right])
             {
-                continue;
+                if (right - left + 1 > resultLengts)
+                {
+                    start = left;
+                    resultLengts = right - left + 1;
+                }
+
+                left--;
+                right++;
             }
-            var withoutLeft = s.Substring(i + 1);
-            while (withoutLeft.Contains(leftChar))
+
+            left = i;
+            right = i + 1;
+
+            while (left >= 0 && right < s.Length && s[left] == s[right])
             {
-                var rightIndex = withoutLeft.IndexOf(leftChar) + s.Length - withoutLeft.Length;
-                var tempLeftIndex = leftIndex;
-                var tempRightIndex = rightIndex;
-                var isPolindrome = true;
-                while (tempRightIndex - tempLeftIndex != 1)
+                if (right - left + 1 > resultLengts)
                 {
-                    if (s[tempLeftIndex] == s[tempRightIndex])
-                    {
-                        tempLeftIndex++;
-                        tempRightIndex--;
-                        if (tempRightIndex - tempLeftIndex == 0)
-                        {
-                            isPolindrome = true;
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        isPolindrome = false;
-                        break;
-                    }
+                    start = left;
+                    resultLengts = right - left + 1;
                 }
 
-                if (isPolindrome)
-                {
-                    var newSubstringPalindrome = s.Substring(leftIndex, rightIndex - leftIndex + 1);
-
-                    result = newSubstringPalindrome.Length >= result.Length ? newSubstringPalindrome : result;
-                }
-
-                if (rightIndex <= withoutLeft.Length)
-                {
-                    withoutLeft = withoutLeft.Substring(rightIndex);
-                }
-                else
-                {
-                    withoutLeft = String.Empty;
-                }
+                left--;
+                right++;
             }
         }
 
-        return result;
+        return s.Substring(start, resultLengts);
     }
 }
