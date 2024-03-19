@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks;
 
-var task = new ZigzagConversion();
-task.Exectute();
+var task = new ReverseInteger();
+task.Execute();
