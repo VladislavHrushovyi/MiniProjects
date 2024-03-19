@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks;
 
-var longestPalindrome = new LongestPalindrome();
-longestPalindrome.Execute();
+var task = new MyAtoi();
+task.Execute();
