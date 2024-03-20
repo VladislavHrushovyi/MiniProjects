@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks;
 
-var task = new MyAtoi();
+var task = new PalindromeNumber();
 task.Execute();
