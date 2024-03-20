@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks;
 
-var task = new PalindromeNumber();
+var task = new RegexMatching();
 task.Execute();
