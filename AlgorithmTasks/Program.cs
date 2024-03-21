@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks;
 
-var task = new RegexMatching();
+var task = new HedgehogMutant();
 task.Execute();
