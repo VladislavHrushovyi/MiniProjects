@@ -10,7 +10,7 @@ public class LongestPalindrome
     }
 }
 
-public partial class Solution {
+partial class Solution {
     public string LongestPalindrome(string s)
     {
         if (s.Length == 1)
