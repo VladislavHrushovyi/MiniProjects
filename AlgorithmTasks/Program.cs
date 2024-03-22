@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks;
 
-var task = new HedgehogMutant();
+var task = new BiggestWaterContainer();
 task.Execute();
