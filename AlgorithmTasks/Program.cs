@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks;
 
-var task = new IntegerToRoman();
+var task = new RomanToInteger();
 task.Execute();
