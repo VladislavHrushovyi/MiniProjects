@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks;
 
-var task = new RomanToInteger();
+var task = new LongestPrefix();
 task.Execute();
