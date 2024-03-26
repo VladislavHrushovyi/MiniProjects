@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks;
 
-var task = new ClosestThreeSum();
+var task = new LetterCombination();
 task.Execute();
