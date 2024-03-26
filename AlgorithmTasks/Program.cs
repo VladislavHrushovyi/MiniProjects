@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks;
 
-var task = new ThreeSum();
+var task = new ClosestThreeSum();
 task.Execute();
