@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks;
 
-var task = new LongestPrefix();
+var task = new LetterCombination();
 task.Execute();
