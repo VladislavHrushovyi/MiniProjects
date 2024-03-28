@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks;
 
-var task = new LetterCombination();
+var task = new RemoveNthNode();
 task.Execute();
