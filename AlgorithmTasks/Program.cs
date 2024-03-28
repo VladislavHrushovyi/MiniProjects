@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks;
 
-var task = new FourSum();
+var task = new RemoveNthNode();
 task.Execute();
