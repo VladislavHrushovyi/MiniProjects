@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks;
 
-var task = new RemoveNthNode();
+var task = new ValidParentheses();
 task.Execute();
