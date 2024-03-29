@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks;
 
-var task = new ValidParentheses();
+var task = new MergeTwoSortedLists();
 task.Execute();
