@@ -7,13 +7,13 @@ public class RemoveNthNode
         var sol = new Solution();
         var number1 = new ListNode(1);
         var node1_2 = new ListNode(2);
-        number1.Next = node1_2;
+        number1.next = node1_2;
         var node1_3 = new ListNode(3);
-        node1_2.Next = node1_3;
+        node1_2.next = node1_3;
         var node1_4 = new ListNode(4);
-        node1_3.Next = node1_4;
+        node1_3.next = node1_4;
         var node1_5 = new ListNode(5);
-        node1_4.Next = node1_5;
+        node1_4.next = node1_5;
         // var node1_6 = new ListNode(9);
         // node1_5.Next = node1_6;
         // var node1_7 = new ListNode(9);
@@ -22,15 +22,15 @@ public class RemoveNthNode
 
         while (nodeListResult != null)
         {
-            Console.Write(nodeListResult.Value+ "-");
-            nodeListResult = nodeListResult.Next;
+            Console.Write(nodeListResult.val+ "-");
+            nodeListResult = nodeListResult.next;
         }
     }
 }
 partial class Solution {
     public ListNode RemoveNthFromEnd(ListNode head, int n)
     {
-        if (head.Next == null && n == 1)
+        if (head.next == null && n == 1)
         {
             return new ListNode();
         }
@@ -40,12 +40,12 @@ partial class Solution {
         while (currNode != null)
         {
             treeLength++;
-            currNode = currNode.Next;
+            currNode = currNode.next;
         }
 
         if (treeLength == n)
         {
-            head = head.Next;
+            head = head.next;
             return head;
         }
         currNode = head;
@@ -56,13 +56,13 @@ partial class Solution {
         {
             if (indexer == indexRemovedNode)
             {
-                prevNode.Next = currNode.Next;
-                currNode.Next = null;
+                prevNode.next = currNode.next;
+                currNode.next = null;
                 break;
             }
             indexer++;
             prevNode = currNode;
-            currNode = currNode.Next;
+            currNode = currNode.next;
         }
         return head;
     }
