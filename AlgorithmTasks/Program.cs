@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks;
 
-var task = new GenerateParentheses();
+var task = new MergeKSortedList();
 task.Execute();
