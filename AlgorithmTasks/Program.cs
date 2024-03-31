@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks;
 
-var task = new MergeTwoSortedLists();
+var task = new SwapNodesInPairs();
 task.Execute();
