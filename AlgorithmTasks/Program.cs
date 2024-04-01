@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks;
 
-var task = new SwapNodesInPairs();
+var task = new ReverseNodesInK_Group();
 task.Execute();
