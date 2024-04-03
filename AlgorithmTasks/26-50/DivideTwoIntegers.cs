@@ -16,31 +16,17 @@ public class DivideTwoIntegers
 
 partial class Solution {
     public int Divide(int dividend, int divisor) {
-        if (dividend == 0)
-        {
-            return 0;
+        if(dividend == int.MinValue && divisor == -1) return int.MaxValue;
+        int sign = (dividend < 0) ^ (divisor < 0)? -1:1;
+        long dvd = Math.Abs((long)dividend);
+        long dvs = Math.Abs((long)divisor);
+        long quotient = 0;
+        for(int i = 31; i >= 0; i--){
+            if((dvd >> i) >= dvs){
+                quotient += (1L << i);
+                dvd -= (dvs << i);
+            }
         }
-
-        if (divisor == 1 && dividend == int.MaxValue) return int.MaxValue;
-        if (divisor == -1 && dividend == int.MaxValue) return -int.MaxValue;
-        if (divisor == 1 && dividend == int.MinValue) return int.MinValue;
-        if (divisor == -1 && dividend == int.MinValue) return int.MaxValue;
-        int sign = (dividend < 0) ^ (divisor < 0) ? -1 : 1;
-        
-        long dividendLong = Math.Abs((long)dividend);
-        long divisorLong = Math.Abs((long)divisor);
-        int parts = 0;
-        while (dividendLong >= divisorLong)
-        {
-            parts++;
-            dividendLong -= divisorLong;
-        }
-
-        if (sign == -1)
-        {
-            parts = -parts;
-        }
-
-        return parts;
+        return (int)(sign * quotient);
     }
 }
