@@ -1,5 +1,5 @@
 ﻿using AlgorithmTasks;
 using AlgorithmTasks._26_50;
 
-var task = new DivideTwoIntegers();
+var task = new SubstringWithConcatenationOfAllWords();
 task.Execute();
