@@ -30,13 +30,13 @@ partial class Solution {
         for (int i = 0; i < s.Length - substrLength + 1; i+= 1)
         {
             var currSubStr = s.Substring(i, substrLength);
-            var currWords = currSubStr.Chunk(words[0].Length)
-                .Select(x => string.Join("", x))
-                .ToArray();
-            var equalItems = currWords.Union(words);
-            if (equalItems.Count() == currWords.Length)
+            foreach (var word in words)
             {
-                result.Add(i);
+                currSubStr = ReplaceFirst(currSubStr, word, "");
+                if (string.IsNullOrEmpty(currSubStr))
+                {
+                    result.Add(i);
+                }
             }
         }
         return result;
@@ -44,19 +44,12 @@ partial class Solution {
 
     private string ReplaceFirst(string originalText, string search, string replace)
     {
-        bool isDeleteCurr = false;
-        var parts = originalText.Chunk(search.Length);
-        var withoutSearch = parts.Where(x =>
+        int index = originalText.IndexOf(search, StringComparison.Ordinal);
+        if (index == -1)
         {
-            if (string.Join("", x) == search && !isDeleteCurr)
-            {
-                isDeleteCurr = true;
-                return false;
-            }
+            return originalText;
+        }
 
-            return true;
-        });
-
-        return string.Join("", withoutSearch.Select(x => string.Join("", x)));
+        return originalText.Substring(0, index) + replace + originalText.Substring(index + search.Length);
     }
 }
