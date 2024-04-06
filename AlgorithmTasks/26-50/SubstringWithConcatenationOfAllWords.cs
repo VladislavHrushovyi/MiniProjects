@@ -5,8 +5,8 @@ public class SubstringWithConcatenationOfAllWords
     public void Execute()
     {
         var sol = new Solution();
-        var result = sol.FindSubstring("wordgoodgoodgoodbestword",
-            new[] {"word","good","best","good"});
+        var result = sol.FindSubstring("barfoothefoobarman",
+            new[] {"foo","bar"});
         Console.WriteLine($"{string.Join(',', result)}");
     }
 }
@@ -20,36 +20,51 @@ partial class Solution {
             return result;
         }
 
-        int wordlength = words[0].Length;
-        int substrLength = wordlength * words.Length;
+        int wordLength = words[0].Length;
+        int substrLength = wordLength * words.Length;
         if (substrLength > s.Length)
         {
             return result;
         }
-
-        for (int i = 0; i < s.Length - substrLength + 1; i+= 1)
+        Dictionary<string, int> wordDict = words.GroupBy(s => s)
+            .ToDictionary(k => k.Key, v => v.Count());
+        for (int i = 0; i <= s.Length - substrLength; i+= 1)
         {
             var currSubStr = s.Substring(i, substrLength);
-            foreach (var word in words)
+            if (IsValidSubStr(currSubStr, wordDict, wordLength))
             {
-                currSubStr = ReplaceFirst(currSubStr, word, "");
-                if (string.IsNullOrEmpty(currSubStr))
-                {
-                    result.Add(i);
-                }
+                result.Add(i);
             }
         }
         return result;
     }
 
-    private string ReplaceFirst(string originalText, string search, string replace)
+    private bool IsValidSubStr(string currSubStr, Dictionary<string, int> wordDict, int wordLength)
     {
-        int index = originalText.IndexOf(search, StringComparison.Ordinal);
-        if (index == -1)
+        int num = currSubStr.Length / wordLength;
+        bool isValid = true;
+        Dictionary<string, int> newWordDict = new(wordDict);
+
+        for (int i = 0; i < num; i++)
         {
-            return originalText;
+            int index = i * wordLength;
+            string wordFromString = currSubStr.Substring(index, wordLength);
+            if (!newWordDict.ContainsKey(wordFromString))
+            {
+                isValid = false;
+                break;
+            }
+
+            if (newWordDict[wordFromString] > 1)
+            {
+                newWordDict[wordFromString]--;
+            }
+            else
+            {
+                newWordDict.Remove(wordFromString);
+            }
         }
 
-        return originalText.Substring(0, index) + replace + originalText.Substring(index + search.Length);
+        return isValid;
     }
 }
