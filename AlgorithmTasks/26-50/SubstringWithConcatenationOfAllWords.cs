@@ -5,8 +5,8 @@ public class SubstringWithConcatenationOfAllWords
     public void Execute()
     {
         var sol = new Solution();
-        var result = sol.FindSubstring("wordgoodgoodgoodbestword",
-            new[] {"word","good","best","good"});
+        var result = sol.FindSubstring("barfoothefoobarman",
+            new[] {"foo","bar"});
         Console.WriteLine($"{string.Join(',', result)}");
     }
 }
@@ -20,21 +20,18 @@ partial class Solution {
             return result;
         }
 
-        int wordlength = words[0].Length;
-        int substrLength = wordlength * words.Length;
+        int wordLength = words[0].Length;
+        int substrLength = wordLength * words.Length;
         if (substrLength > s.Length)
         {
             return result;
         }
-
-        for (int i = 0; i < s.Length - substrLength + 1; i+= 1)
+        Dictionary<string, int> wordDict = words.GroupBy(s => s)
+            .ToDictionary(k => k.Key, v => v.Count());
+        for (int i = 0; i <= s.Length - substrLength; i+= 1)
         {
             var currSubStr = s.Substring(i, substrLength);
-            var currWords = currSubStr.Chunk(words[0].Length)
-                .Select(x => string.Join("", x))
-                .ToArray();
-            var equalItems = currWords.Union(words);
-            if (equalItems.Count() == currWords.Length)
+            if (IsValidSubStr(currSubStr, wordDict, wordLength))
             {
                 result.Add(i);
             }
@@ -42,21 +39,32 @@ partial class Solution {
         return result;
     }
 
-    private string ReplaceFirst(string originalText, string search, string replace)
+    private bool IsValidSubStr(string currSubStr, Dictionary<string, int> wordDict, int wordLength)
     {
-        bool isDeleteCurr = false;
-        var parts = originalText.Chunk(search.Length);
-        var withoutSearch = parts.Where(x =>
+        int num = currSubStr.Length / wordLength;
+        bool isValid = true;
+        Dictionary<string, int> newWordDict = new(wordDict);
+
+        for (int i = 0; i < num; i++)
         {
-            if (string.Join("", x) == search && !isDeleteCurr)
+            int index = i * wordLength;
+            string wordFromString = currSubStr.Substring(index, wordLength);
+            if (!newWordDict.ContainsKey(wordFromString))
             {
-                isDeleteCurr = true;
-                return false;
+                isValid = false;
+                break;
             }
 
-            return true;
-        });
+            if (newWordDict[wordFromString] > 1)
+            {
+                newWordDict[wordFromString]--;
+            }
+            else
+            {
+                newWordDict.Remove(wordFromString);
+            }
+        }
 
-        return string.Join("", withoutSearch.Select(x => string.Join("", x)));
+        return isValid;
     }
 }
