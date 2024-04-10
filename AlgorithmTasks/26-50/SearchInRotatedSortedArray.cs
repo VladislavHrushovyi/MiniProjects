@@ -14,28 +14,15 @@ partial class Solution {
     public int Search(int[] nums, int target)
     {
         int left = 0, right = nums.Length - 1;
-        if (nums[0] == target)
-        {
-            return 0;
-        }
-        if (nums.Length >= 1)
-        {
-            int index = nums.ElementAt(target);
-            return index == nums.Length ? -1 : index;
-        }
         while (left < right)
         {
-            int mid = (right + left) / 2;
-            if (nums[mid] == target)
-            {
-                return mid;
-            }
+            int mid = (left + right) >> 1;  // / 2
 
-            if (nums[left] <= nums[mid])
+            if (nums[0] <= nums[mid])
             {
-                if (nums[left] <= target && target < nums[mid])
+                if (nums[0] <= target && target <= nums[mid])
                 {
-                    right = mid - 1;
+                    right = mid;
                 }
                 else
                 {
@@ -43,18 +30,16 @@ partial class Solution {
                 }
             }
             else
+            if (nums[mid] < target && target <= nums[nums.Length - 1])
             {
-                if (nums[mid] < target && target <= nums[right])
-                {
-                    left = mid + 1;
-                }
-                else
-                {
-                    right = mid - 1;
-                }
+                left = mid + 1;
             }
+            else
+            {
+                right = mid;
+            }
+            
         }
-
-        return -1;
+        return nums[left] == target ? left : -1;
     }
 }
