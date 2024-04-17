@@ -1,5 +1,4 @@
-﻿using AlgorithmTasks;
-using AlgorithmTasks._26_50;
+﻿using AlgorithmTasks._26_50;
 
-var task = new CountAndSay();
+var task = new CombinationSum();
 task.Execute();
