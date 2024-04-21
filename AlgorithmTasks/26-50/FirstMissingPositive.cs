@@ -13,8 +13,15 @@ public class FirstMissingPositive
 partial class Solution {
     public int FirstMissingPositive(int[] nums)
     {
-        int result = 1;
-
-        return result;
+        HashSet<int> h = new HashSet<int>();
+        for (int i = 0; i < nums.Length; i++)
+            if (nums[i] > 0)
+                h.Add(nums[i]);
+                
+        for (int i = 1;;i++)
+        {
+            if (!h.Contains(i))
+                return i;
+        }
     }
 }
