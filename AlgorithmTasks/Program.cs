@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks._26_50;
 
-var task = new Permutations();
+var task = new PermutationTwo();
 task.Execute();

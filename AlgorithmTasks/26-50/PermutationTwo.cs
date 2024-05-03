@@ -7,7 +7,7 @@ public class PermutationTwo
     public void Execute()
     {
         var sol = new Solution();
-        var result = sol.PermuteUnique(new[] { 1, 2, 3 });
+        var result = sol.PermuteUnique(new[] { 1, 1, 2 });
         var sb = new StringBuilder();
         foreach (var row in result)
         {
@@ -21,6 +21,29 @@ public class PermutationTwo
 partial class Solution {
     public IList<IList<int>> PermuteUnique(int[] nums)
     {
-        return new List<IList<int>>();
+        IList<IList<int>> result = new List<IList<int>>();
+        Backtrack(nums, 0, result);
+        return result;
+    }
+    
+    private void Backtrack(IList<int> nums, int begin, IList<IList<int>> result)
+    {
+        if (begin == nums.Count - 1)
+        {
+            result.Add(nums.ToArray());
+        }
+
+        var set = new HashSet<int>();
+
+        for (int i = begin; i < nums.Count; i++)
+        {
+            if (!set.Add(nums[i])) continue;
+
+            (nums[i], nums[begin]) = (nums[begin], nums[i]);
+
+            Backtrack(nums, begin + 1, result);
+
+            (nums[i], nums[begin]) = (nums[begin], nums[i]);
+        }
     }
 }
