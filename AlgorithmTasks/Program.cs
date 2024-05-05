@@ -1,4 +1,4 @@
 ﻿using AlgorithmTasks._26_50;
 
-var task = new PermutationTwo();
+var task = new RotateImage();
 task.Execute();
