@@ -1,5 +1,5 @@
 ﻿using AlgorithmTasks._26_50;
 using AlgorithmTasks._51_75;
 
-var task = new NQueensTwo();
+var task = new MaximumSubarray();
 task.Execute();
