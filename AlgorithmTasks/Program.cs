@@ -1,5 +1,5 @@
 ﻿using AlgorithmTasks._26_50;
 using AlgorithmTasks._51_75;
 
-var task = new RotateList();
+var task = new UniquePaths();
 task.Execute();
