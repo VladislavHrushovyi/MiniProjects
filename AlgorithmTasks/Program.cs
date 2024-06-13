@@ -1,5 +1,5 @@
 ﻿using AlgorithmTasks._26_50;
 using AlgorithmTasks._51_75;
 
-var task = new ValidNumber();
+var task = new PlusOne();
 task.Execute();

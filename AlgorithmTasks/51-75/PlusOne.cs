@@ -14,6 +14,21 @@ public class PlusOne
 partial class Solution {
     public int[] PlusOne(int[] digits)
     {
-        return new[] { 1 };
+        int index = 1;
+        return StartSummary(digits, index).ToArray();
+    }
+
+    int[] StartSummary(int[] digits, int index)
+    {
+        digits[^index]++;
+        if (digits[^index] != 10) return digits;
+        
+        digits[^index] = 0;
+        index++;
+        if (digits.Length >= index) return StartSummary(digits, index);
+        
+        var result = new int[digits.Length + 1];
+        result[0] = 1;
+        return result;
     }
 }
