@@ -7,7 +7,8 @@ if (File.Exists("./Trees.txt"))
 {
     File.Delete("./Trees.txt");
 }
-var file = File.Create("./Trees.txt");
+
+await using var file = File.Create("./Trees.txt");
 Console.WriteLine("From");
 int from = Int32.Parse(Console.ReadLine());
 Console.WriteLine("To");
