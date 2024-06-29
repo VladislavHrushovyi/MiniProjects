@@ -39,7 +39,10 @@ void DoSearch(int id)
         }   
     }
 }
-Parallel.For(from, to,new ParallelOptions(){MaxDegreeOfParallelism = 8}, _ => DoSearch(Random.Shared.Next(from,to)));
+Parallel.For(from, to,new ParallelOptions(){MaxDegreeOfParallelism = 12}, i => DoSearch(i));
+
+Console.WriteLine("FINISH. Press any key to exit...");
+Console.ReadKey();
 // async Task DoSearchAsync(int id)
 // {
 //     var claimableInfo = await mintClient.GetNotClaimedMintTree(id);
