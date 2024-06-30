@@ -30,7 +30,8 @@ void DoSearch(int id)
         var validObj = claimableInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 100 });
         if (validObj is not null)
         {
-            Console.WriteLine($"https://www.mintchain.io/mint-forest?id={id} ---> {validObj.Amount}ME");
+            string output = $"https://www.mintchain.io/mint-forest?id={id} ---> {validObj.Amount}ME";
+            Console.WriteLine(validObj.Amount >= moreThan ? output +  " \t <<--- BINGO" : output);
             if (validObj.Amount >= moreThan)
             {
                 string line = $"https://www.mintchain.io/mint-forest?id={id} ---> {validObj.Amount}ME \n";
@@ -39,27 +40,7 @@ void DoSearch(int id)
         }   
     }
 }
-Parallel.For(from, to,new ParallelOptions(){MaxDegreeOfParallelism = 12}, i => DoSearch(i));
+Parallel.For(from, to,new ParallelOptions(){MaxDegreeOfParallelism = 30}, i => DoSearch(i));
 
 Console.WriteLine("FINISH. Press any key to exit...");
 Console.ReadKey();
-// async Task DoSearchAsync(int id)
-// {
-//     var claimableInfo = await mintClient.GetNotClaimedMintTree(id);
-//     if (claimableInfo.Result != null)
-//     {
-//         var validObj = claimableInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 100 });
-//         if (validObj is not null)
-//         {
-//             Console.WriteLine($"https://www.mintchain.io/mint-forest?id={id} ---> {validObj.Amount}ME");
-//             if (validObj.Amount >= moreThan)
-//             {
-//                 string line = $"https://www.mintchain.io/mint-forest?id={id} ---> {validObj.Amount}ME \n";
-//                 file.Write(Encoding.ASCII.GetBytes(line));   
-//             }
-//         }   
-//     }
-// }
-//
-// var reqTasks = Enumerable.Range(from, to).Select(DoSearchAsync);
-// await Task.WhenAll(reqTasks);
