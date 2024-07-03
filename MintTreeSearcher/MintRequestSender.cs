@@ -25,7 +25,7 @@ public class MintRequestSender(string authToken)
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.Message);
+            Console.WriteLine($"ERROR UserId {id}");
         }
 
         return new Response() { Result = new ItemsTree[] { new ItemsTree() { Amount = 1, Stealable = false } } };
@@ -48,7 +48,7 @@ public class MintRequestSender(string authToken)
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.Message);
+            Console.WriteLine($"ERROR TreeId {treeId}");
         }
 
         return new UserInfo() { Result = new Result() { Id = 0 } };
