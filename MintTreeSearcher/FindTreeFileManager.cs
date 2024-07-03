@@ -5,22 +5,26 @@ namespace MintTreeSearcher;
 public class FindTreeFileManager
 {
     private const string _fileName = "Trees.txt";
+    private readonly object _lock = new();
     public FindTreeFileManager()
     {
         if (File.Exists(_fileName) )
         {
-            var dateCreationFile = File.GetCreationTime(_fileName);
-            if (dateCreationFile.Date != DateTime.Now.Date)
+            var lastAccessTime = File.GetLastAccessTime(_fileName);
+            if (lastAccessTime.Date != DateTime.Now.Date)
             {
-                Console.WriteLine($"Creation time {dateCreationFile.Date} -- Now date {DateTime.Now.Date}");
+                Console.WriteLine($"Creation time {lastAccessTime.Date} -- Now date {DateTime.Now.Date}");
                 Console.WriteLine("DELETE FILE");
                 File.Delete(_fileName);
             }
         }
     }
 
-    public async Task AppendLine(string data)
+    public void AppendLine(string data)
     {
-        await File.AppendAllTextAsync(_fileName, data);
+        lock (_lock)
+        { 
+            File.AppendAllTextAsync(_fileName, data);
+        }
     }
 }

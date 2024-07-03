@@ -15,7 +15,7 @@ int moreThan = Int32.Parse(Console.ReadLine());
 MintRequestSender mintClient = new MintRequestSender(authToken);
 FindTreeFileManager fileManager = new FindTreeFileManager();
 
-await fileManager.AppendLine($"\t RANGE {from}-{to} \n");
+fileManager.AppendLine($"\t RANGE {from}-{to} \n");
 
 void DoSearch(int id)
 {
@@ -30,11 +30,11 @@ void DoSearch(int id)
             if (validObj.Amount >= moreThan)
             {
                 string line = $"https://www.mintchain.io/mint-forest?id={id} ---> {validObj.Amount}ME \n";
-                fileManager.AppendLine(line).GetAwaiter().GetResult();
+                fileManager.AppendLine(line);
             }
         }   
     }
 }
-Parallel.For(from, to,new ParallelOptions(){MaxDegreeOfParallelism = 30}, i => DoSearch(i));
+Parallel.For(from, to,new ParallelOptions(){MaxDegreeOfParallelism = 25}, i => DoSearch(i));
 Console.WriteLine("FINISH. Press any key to exit...");
 Console.ReadKey();
