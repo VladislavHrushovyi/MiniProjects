@@ -16,12 +16,9 @@ MintRequestSender mintClient = new MintRequestSender(authToken);
 FindTreeFileManager fileManager = new FindTreeFileManager();
 
 fileManager.AppendLine($"\t RANGE {from}-{to} \n");
-//var userIds = Enumerable.Range(from, to - from).Chunk(25);
-//Console.WriteLine(userIds.Last().Last());
 void DoSearch(int id)
 {
     var claimableInfo = mintClient.GetNotClaimedMintTree(id).GetAwaiter().GetResult();
-    //var claimableInfo = new Response() { Result = Enumerable.Range(1, 2).Select(x => new ItemsTree(){Stealable = true, Amount = Random.Shared.Next(100,2000)}) };
     if (claimableInfo.Result != null)
     {
         var validObj = claimableInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 100 });
