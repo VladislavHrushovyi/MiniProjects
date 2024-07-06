@@ -65,12 +65,19 @@ public class MintRequestSender
     {
         var uri = new Uri($"https://www.mintchain.io/api/tree/steal/claim?id={resultId}");
         var response = await _httpClient.GetAsync(uri);
-        if (response.StatusCode == HttpStatusCode.OK)
+        try
         {
-            var jsonString = await response.Content.ReadAsStringAsync();
-            var steelResponse = JsonSerializer.Deserialize<SteelResponse>(jsonString);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var steelResponse = JsonSerializer.Deserialize<SteelResponse>(jsonString);
 
-            return steelResponse;
+                return steelResponse;
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
         }
 
         return new SteelResponse() { SreelInfo = new SteelInfo() { Amount = 0 } };
