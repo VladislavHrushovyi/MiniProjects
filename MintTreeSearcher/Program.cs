@@ -16,19 +16,20 @@ MintRequestSender mintClient = new MintRequestSender(authToken);
 FindTreeFileManager fileManager = new FindTreeFileManager();
 
 fileManager.AppendLine($"\t RANGE {from}-{to} \n");
-void DoSearch(int id)
+void DoSearch(int treeId)
 {
-    var claimableInfo = mintClient.GetNotClaimedMintTree(id).GetAwaiter().GetResult();
+    var userInfo = mintClient.GetUserInfo(treeId).GetAwaiter().GetResult();
+    var claimableInfo = mintClient.GetNotClaimedMintTree(userInfo.Result.Id).GetAwaiter().GetResult();
     if (claimableInfo.Result != null)
     {
         var validObj = claimableInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 100 });
         if (validObj is not null)
         {
-            string output = $"https://www.mintchain.io/mint-forest?id={id} ---> {validObj.Amount}ME";
+            string output = $"https://www.mintchain.io/mint-forest?id={treeId} ---> {validObj.Amount}ME";
             Console.WriteLine(validObj.Amount >= moreThan ? output +  " \t <<--- BINGO" : output);
             if (validObj.Amount >= moreThan)
             {
-                string line = $"https://www.mintchain.io/mint-forest?id={id} ---> {validObj.Amount}ME \n";
+                string line = $"https://www.mintchain.io/mint-forest?id={treeId} ---> {validObj.Amount}ME \n";
                 fileManager.AppendLine(line);
             }
         }   

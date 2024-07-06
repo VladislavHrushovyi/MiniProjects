@@ -15,14 +15,13 @@ public class MintRequestSender
         _httpClient.DefaultRequestHeaders.Add("Accept", new []{"application/json", "text/plain", "*/*"});
         _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36");
     }
-    public async Task<Response> GetNotClaimedMintTree(int id)
+    public async Task<Response> GetNotClaimedMintTree(int userId)
     {
-        var userInfo = await GetUserInfo(id);
-        if (userInfo.Result.Id == 0)
+        if (userId == 0)
         {
             return new Response() { Result = new ItemsTree[] { new ItemsTree() { Amount = 1, Stealable = false } } };
         }
-        var uri = new Uri($"https://www.mintchain.io/api/tree/steal/energy-list?id={userInfo.Result.Id}");
+        var uri = new Uri($"https://www.mintchain.io/api/tree/steal/energy-list?id={userId}");
         try
         {
             var response = await _httpClient.GetAsync(uri);
@@ -35,13 +34,13 @@ public class MintRequestSender
         }
         catch (Exception e)
         {
-            Console.WriteLine($"ERROR UserId {id}");
+            Console.WriteLine($"ERROR UserId {userId}");
         }
 
         return new Response() { Result = new ItemsTree[] { new ItemsTree() { Amount = 1, Stealable = false } } };
     }
 
-    private async Task<UserInfo> GetUserInfo(int treeId)
+    public async Task<UserInfo> GetUserInfo(int treeId)
     {
         var uri = new Uri($"https://www.mintchain.io/api/tree/user-info?treeid={treeId}");
         try
@@ -60,5 +59,20 @@ public class MintRequestSender
         }
 
         return new UserInfo() { Result = new Result() { Id = 0 } };
+    }
+
+    public async Task<SteelResponse> SteelTree(int resultId)
+    {
+        var uri = new Uri($"https://www.mintchain.io/api/tree/steal/claim?id={resultId}");
+        var response = await _httpClient.GetAsync(uri);
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var steelResponse = JsonSerializer.Deserialize<SteelResponse>(jsonString);
+
+            return steelResponse;
+        }
+
+        return new SteelResponse() { SreelInfo = new SteelInfo() { Amount = 0 } };
     }
 }
