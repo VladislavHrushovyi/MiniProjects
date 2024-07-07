@@ -5,7 +5,7 @@ namespace MintTreeSearcher;
 public class SteelResponse
 {
     [JsonPropertyName("result")]
-    public SteelInfo SreelInfo { get; set; }
+    public SteelInfo SteelInfo { get; set; }
 }
 
 public class SteelInfo

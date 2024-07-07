@@ -12,14 +12,17 @@ int to = Int32.Parse(Console.ReadLine());
 Console.WriteLine("Enter more than:");
 int moreThan = Int32.Parse(Console.ReadLine());
 
-MintRequestSender mintClient = new MintRequestSender(authToken);
 FindTreeFileManager fileManager = new FindTreeFileManager();
+var httpClientsFactory = new HttpClientFactory(authToken);
 
 fileManager.AppendLine($"\t RANGE {from}-{to} \n");
-void DoSearch(int treeId)
+async Task DoSearch(HttpClient client, int treeId)
 {
-    var userInfo = mintClient.GetUserInfo(treeId).GetAwaiter().GetResult();
-    var claimableInfo = mintClient.GetNotClaimedMintTree(userInfo.Result.Id).GetAwaiter().GetResult();
+    MintRequestSender mintClient = new MintRequestSender(client);
+    var userInfo = await mintClient.GetUserInfo(treeId);
+    await Task.Delay(400);
+    var claimableInfo = await mintClient.GetNotClaimedMintTree(userInfo.Result.Id);
+    await Task.Delay(400);
     if (claimableInfo.Result != null)
     {
         var validObj = claimableInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 100 });
@@ -36,6 +39,10 @@ void DoSearch(int treeId)
     }
 }
 
-Parallel.For(from, to, new ParallelOptions() { MaxDegreeOfParallelism = 25 }, i => DoSearch(i));
+for (int i = from; i <= to; i += httpClientsFactory.HttpClients.Count)
+{
+    var tasks = httpClientsFactory.HttpClients.Select(x => DoSearch(x, i++));
+    await Task.WhenAll(tasks);
+}
 Console.WriteLine("FINISH. Press any key to exit...");
 Console.ReadKey();

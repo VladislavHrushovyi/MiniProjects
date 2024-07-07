@@ -1,20 +1,10 @@
 ﻿using System.Net;
-using System.Net.Http.Headers;
 using System.Text.Json;
 
 namespace MintTreeSearcher;
 
-public class MintRequestSender
+public class MintRequestSender(HttpClient httpClient)
 {
-    private readonly HttpClient _httpClient;
-
-    public MintRequestSender(string authToken)
-    {
-        _httpClient = new HttpClient();
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
-        _httpClient.DefaultRequestHeaders.Add("Accept", new []{"application/json", "text/plain", "*/*"});
-        _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36");
-    }
     public async Task<Response> GetNotClaimedMintTree(int userId)
     {
         if (userId == 0)
@@ -24,8 +14,9 @@ public class MintRequestSender
         var uri = new Uri($"https://www.mintchain.io/api/tree/steal/energy-list?id={userId}");
         try
         {
-            var response = await _httpClient.GetAsync(uri);
+            var response = await httpClient.GetAsync(uri);
             var jsonString = await response.Content.ReadAsStringAsync();
+            //Console.WriteLine(jsonString);
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var claimableInfo = JsonSerializer.Deserialize<Response>(jsonString);
@@ -45,8 +36,9 @@ public class MintRequestSender
         var uri = new Uri($"https://www.mintchain.io/api/tree/user-info?treeid={treeId}");
         try
         {
-            var response = await _httpClient.GetAsync(uri);
+            var response = await httpClient.GetAsync(uri);
             var jsonString = await response.Content.ReadAsStringAsync();
+            //Console.WriteLine(jsonString);
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var objResult = JsonSerializer.Deserialize<UserInfo>(jsonString);
@@ -64,22 +56,22 @@ public class MintRequestSender
     public async Task<SteelResponse> SteelTree(int resultId)
     {
         var uri = new Uri($"https://www.mintchain.io/api/tree/steal/claim?id={resultId}");
-        var response = await _httpClient.GetAsync(uri);
+        var response = await httpClient.GetAsync(uri);
         try
         {
+            var jsonString = await response.Content.ReadAsStringAsync();
+            Console.WriteLine(jsonString + "Steelling++++++++++++");
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var jsonString = await response.Content.ReadAsStringAsync();
                 var steelResponse = JsonSerializer.Deserialize<SteelResponse>(jsonString);
-
                 return steelResponse;
             }
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.Message);
+            Console.WriteLine(e);
         }
 
-        return new SteelResponse() { SreelInfo = new SteelInfo() { Amount = 0 } };
+        return new SteelResponse() { SteelInfo = new SteelInfo() { Amount = 0 } };
     }
 }
