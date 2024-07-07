@@ -5,10 +5,11 @@ var authToken = Console.ReadLine();
 
 var idsFromFile = File.ReadAllLines("./Ids.txt");
 
-MintRequestSender mintClient = new MintRequestSender(new HttpClient());
+HttpClientFactory httpClientFactory = new HttpClientFactory(authToken);
 
-async Task DoClaim(string id)
+async Task DoClaim(HttpClient client, string id)
 {
+    MintRequestSender mintClient = new MintRequestSender(client);
     var idNumber = Int32.Parse(id);
     var userInfo = await mintClient.GetUserInfo(idNumber);
     await Task.Delay(400);
@@ -37,11 +38,13 @@ async Task DoClaim(string id)
 }
 
 try
-{ 
-    //Parallel.ForEach(idsFromFile, new ParallelOptions(){MaxDegreeOfParallelism = 1}, DoClaim);
-    foreach (var id in idsFromFile)
+{
+    foreach (var idChunk in idsFromFile.Chunk(httpClientFactory.HttpClients.Count))
     {
-        await DoClaim(id);
+        int index = 0;
+        IEnumerable<Task> tasks = idChunk.Select(x => DoClaim(httpClientFactory.HttpClients[index++], x));
+        await Task.WhenAll(tasks);
+        index = 0;
     }
 }
 catch (Exception e)
