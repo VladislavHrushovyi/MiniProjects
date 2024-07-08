@@ -16,7 +16,7 @@ public class MintRequestSender(HttpClient httpClient)
         {
             var response = await httpClient.GetAsync(uri);
             var jsonString = await response.Content.ReadAsStringAsync();
-            //Console.WriteLine(jsonString);
+            Console.WriteLine(jsonString);
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var claimableInfo = JsonSerializer.Deserialize<Response>(jsonString);
@@ -56,9 +56,9 @@ public class MintRequestSender(HttpClient httpClient)
     public async Task<SteelResponse> SteelTree(int resultId)
     {
         var uri = new Uri($"https://www.mintchain.io/api/tree/steal/claim?id={resultId}");
-        var response = await httpClient.GetAsync(uri);
         try
         {
+            var response = await httpClient.GetAsync(uri);
             var jsonString = await response.Content.ReadAsStringAsync();
             Console.WriteLine(jsonString + "Steelling++++++++++++");
             if (response.StatusCode == HttpStatusCode.OK)
