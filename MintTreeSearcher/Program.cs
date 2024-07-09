@@ -47,11 +47,17 @@ async Task DoSearchChunk(HttpClient client, IEnumerable<int> treeIds)
     }
 }
 
-int index = 0;
-var tasks = Enumerable.Range(from, to - from + 1)
-                        .Chunk(httpClientsFactory.HttpClients.Count)
-                        .Select(x => DoSearchChunk(httpClientsFactory.HttpClients[index++], x));
-
-await Task.WhenAll(tasks);
+try
+{
+    int index = 0;
+    var tasks = Enumerable.Range(from, to - from)
+        .Chunk(httpClientsFactory.HttpClients.Count - 1)
+        .Select(x => DoSearchChunk(httpClientsFactory.HttpClients[index++], x));
+    await Task.WhenAll(tasks);
+}
+catch (Exception e)
+{
+    Console.WriteLine(e);
+}
 Console.WriteLine("FINISH. Press any key to exit...");
 Console.ReadKey();
