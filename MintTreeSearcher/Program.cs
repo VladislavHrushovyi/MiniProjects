@@ -23,10 +23,10 @@ async Task DoSearch(HttpClient client, int treeId)
     await Task.Delay(400);
     var claimableInfo = await mintClient.GetNotClaimedMintTree(userInfo.Result.Id);
     await Task.Delay(400);
-    if (claimableInfo.Result != null)
+    if (claimableInfo.Result.Any())
     {
         var validObj = claimableInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 100 });
-        if (validObj is not null)
+        if (validObj != default)
         {
             string output = $"https://www.mintchain.io/mint-forest?id={treeId} ---> {validObj.Amount}ME";
             Console.WriteLine(validObj.Amount >= moreThan ? output +  " \t <<--- BINGO" : output);
@@ -50,8 +50,10 @@ async Task DoSearchChunk(HttpClient client, IEnumerable<int> treeIds)
 try
 {
     int index = 0;
-    var tasks = Enumerable.Range(from, to - from)
-        .Chunk(httpClientsFactory.HttpClients.Count - 1)
+    int amountIds = to - from;
+    int amountProxy = httpClientsFactory.HttpClients.Count;
+    var tasks = Enumerable.Range(from, amountIds)
+        .Chunk(amountIds / amountProxy)
         .Select(x => DoSearchChunk(httpClientsFactory.HttpClients[index++], x));
     await Task.WhenAll(tasks);
 }

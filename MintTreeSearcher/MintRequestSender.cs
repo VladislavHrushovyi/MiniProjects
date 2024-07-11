@@ -60,7 +60,7 @@ public class MintRequestSender(HttpClient httpClient)
         {
             var response = await httpClient.GetAsync(uri);
             var jsonString = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(jsonString.Substring(0, 20) + "Steelling++++++++++++");
+            //Console.WriteLine(jsonString.Substring(0, 20) + "Steelling++++++++++++");
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var steelResponse = JsonSerializer.Deserialize<SteelResponse>(jsonString);

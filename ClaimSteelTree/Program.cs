@@ -14,7 +14,7 @@ async Task DoClaim(HttpClient client, string id)
     var userInfo = await mintClient.GetUserInfo(idNumber);
     await Task.Delay(400);
     var steelInfo = await mintClient.GetNotClaimedMintTree(userInfo.Result.Id);
-    await Task.Delay(Random.Shared.Next(1500, 3000));
+    await Task.Delay(Random.Shared.Next(1000, 3000));
     var validTree = steelInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 1500 });
     if (validTree != default)
     {
@@ -42,7 +42,11 @@ try
     foreach (var idChunk in idsFromFile.Chunk(httpClientFactory.HttpClients.Count))
     {
         int index = 0;
-        IEnumerable<Task> tasks = idChunk.Select(x => DoClaim(httpClientFactory.HttpClients[index++], x));
+        IEnumerable<Task> tasks = idChunk.Select(x =>
+        {
+            Console.WriteLine(index);
+            return DoClaim(httpClientFactory.HttpClients[index++], x);
+        });
         await Task.WhenAll(tasks);
         index = 0;
     }
