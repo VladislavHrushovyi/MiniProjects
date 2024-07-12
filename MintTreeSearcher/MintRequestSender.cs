@@ -16,7 +16,7 @@ public class MintRequestSender(HttpClient httpClient)
         {
             var response = await httpClient.GetAsync(uri);
             var jsonString = await response.Content.ReadAsStringAsync();
-            //Console.WriteLine(jsonString);
+            Console.WriteLine(jsonString);
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var claimableInfo = JsonSerializer.Deserialize<Response>(jsonString);
@@ -28,7 +28,7 @@ public class MintRequestSender(HttpClient httpClient)
             Console.WriteLine($"ERROR UserId {userId}");
         }
 
-        return new Response() { Result = new ItemsTree[] { new ItemsTree() { Amount = 1, Stealable = false } } };
+        return new Response() { Result = new ItemsTree[] { new ItemsTree() { Amount = 3000, Stealable = false } } };
     }
 
     public async Task<UserInfo> GetUserInfo(int treeId)
@@ -38,7 +38,6 @@ public class MintRequestSender(HttpClient httpClient)
         {
             var response = await httpClient.GetAsync(uri);
             var jsonString = await response.Content.ReadAsStringAsync();
-            //Console.WriteLine(jsonString);
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var objResult = JsonSerializer.Deserialize<UserInfo>(jsonString);
@@ -55,21 +54,29 @@ public class MintRequestSender(HttpClient httpClient)
 
     public async Task<SteelResponse> SteelTree(int resultId)
     {
-        var uri = new Uri($"https://www.mintchain.io/api/tree/steal/claim?id={resultId}");
-        try
+        bool isNotStolen = true;
+        while (isNotStolen)
         {
-            var response = await httpClient.GetAsync(uri);
-            var jsonString = await response.Content.ReadAsStringAsync();
-            //Console.WriteLine(jsonString.Substring(0, 20) + "Steelling++++++++++++");
-            if (response.StatusCode == HttpStatusCode.OK)
+            var uri = new Uri($"https://www.mintchain.io/api/tree/steal/claim?id={resultId}");
+            try
             {
-                var steelResponse = JsonSerializer.Deserialize<SteelResponse>(jsonString);
-                return steelResponse;
+                var response = await httpClient.GetAsync(uri);
+                var jsonString = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(jsonString);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var steelResponse = JsonSerializer.Deserialize<SteelResponse>(jsonString);
+                    if (steelResponse.SteelInfo.Amount > 0)
+                    {
+                        isNotStolen = false;
+                        return steelResponse;   
+                    }
+                }
             }
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }   
         }
 
         return new SteelResponse() { SteelInfo = new SteelInfo() { Amount = 0 } };
