@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlgorithmTasks", "Algorithm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MintTreeSearcher", "MintTreeSearcher\MintTreeSearcher.csproj", "{DE6FD9DF-8D59-4879-8F5F-B3D8320D08FF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClaimSteelTree", "ClaimSteelTree\ClaimSteelTree.csproj", "{82E04408-EAA1-406D-AD3F-7FBA3001EDF9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{DE6FD9DF-8D59-4879-8F5F-B3D8320D08FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE6FD9DF-8D59-4879-8F5F-B3D8320D08FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE6FD9DF-8D59-4879-8F5F-B3D8320D08FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82E04408-EAA1-406D-AD3F-7FBA3001EDF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82E04408-EAA1-406D-AD3F-7FBA3001EDF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82E04408-EAA1-406D-AD3F-7FBA3001EDF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82E04408-EAA1-406D-AD3F-7FBA3001EDF9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

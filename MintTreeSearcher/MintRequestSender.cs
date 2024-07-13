@@ -1,47 +1,45 @@
 ﻿using System.Net;
-using System.Net.Http.Headers;
 using System.Text.Json;
 
 namespace MintTreeSearcher;
 
-public class MintRequestSender(string authToken)
+public class MintRequestSender(HttpClient httpClient)
 {
-    public async Task<Response> GetNotClaimedMintTree(int id)
+    public async Task<Response> GetNotClaimedMintTree(int userId)
     {
-        var userInfo = await GetUserInfo(id);
-        var uri = new Uri($"https://www.mintchain.io/api/tree/steal/energy-list?id={userInfo.Result.Id}");
-        using var httpClient = new HttpClient();
-        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+        if (userId == 0)
+        {
+            return new Response() { Result = new ItemsTree[] { new ItemsTree() { Amount = 1, Stealable = false } } };
+        }
+        var uri = new Uri($"https://www.mintchain.io/api/tree/steal/energy-list?id={userId}");
         try
         {
             var response = await httpClient.GetAsync(uri);
+            var jsonString = await response.Content.ReadAsStringAsync();
+            Console.WriteLine(jsonString);
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var jsonString = await response.Content.ReadAsStringAsync();
                 var claimableInfo = JsonSerializer.Deserialize<Response>(jsonString);
-
                 return claimableInfo;
             }
         }
         catch (Exception e)
         {
-            Console.WriteLine($"ERROR UserId {id}");
+            Console.WriteLine($"ERROR UserId {userId}");
         }
 
-        return new Response() { Result = new ItemsTree[] { new ItemsTree() { Amount = 1, Stealable = false } } };
+        return new Response() { Result = new ItemsTree[] { new ItemsTree() { Amount = 3000, Stealable = false } } };
     }
 
-    private async Task<UserInfo> GetUserInfo(int treeId)
+    public async Task<UserInfo> GetUserInfo(int treeId)
     {
         var uri = new Uri($"https://www.mintchain.io/api/tree/user-info?treeid={treeId}");
-        using var httpClient = new HttpClient();
-        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
         try
         {
             var response = await httpClient.GetAsync(uri);
+            var jsonString = await response.Content.ReadAsStringAsync();
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var jsonString = await response.Content.ReadAsStringAsync();
                 var objResult = JsonSerializer.Deserialize<UserInfo>(jsonString);
                 return objResult;
             }
@@ -52,5 +50,34 @@ public class MintRequestSender(string authToken)
         }
 
         return new UserInfo() { Result = new Result() { Id = 0 } };
+    }
+
+    public async Task<SteelResponse> SteelTree(int resultId)
+    {
+        while (true)
+        {
+            var uri = new Uri($"https://www.mintchain.io/api/tree/steal/claim?id={resultId}");
+            try
+            {
+                await Task.Delay(100);
+                var response = await httpClient.GetAsync(uri);
+                var jsonString = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(jsonString);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var steelResponse = JsonSerializer.Deserialize<SteelResponse>(jsonString);
+                    if (steelResponse.SteelInfo.Amount > 0)
+                    {
+                        return steelResponse;   
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }   
+        }
+
+        return new SteelResponse() { SteelInfo = new SteelInfo() { Amount = 0 } };
     }
 }
