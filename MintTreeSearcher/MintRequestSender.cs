@@ -54,12 +54,12 @@ public class MintRequestSender(HttpClient httpClient)
 
     public async Task<SteelResponse> SteelTree(int resultId)
     {
-        bool isNotStolen = true;
-        while (isNotStolen)
+        while (true)
         {
             var uri = new Uri($"https://www.mintchain.io/api/tree/steal/claim?id={resultId}");
             try
             {
+                await Task.Delay(100);
                 var response = await httpClient.GetAsync(uri);
                 var jsonString = await response.Content.ReadAsStringAsync();
                 Console.WriteLine(jsonString);
@@ -68,7 +68,6 @@ public class MintRequestSender(HttpClient httpClient)
                     var steelResponse = JsonSerializer.Deserialize<SteelResponse>(jsonString);
                     if (steelResponse.SteelInfo.Amount > 0)
                     {
-                        isNotStolen = false;
                         return steelResponse;   
                     }
                 }
