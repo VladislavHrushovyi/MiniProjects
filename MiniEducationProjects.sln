@@ -14,6 +14,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MintTreeSearcher", "MintTre
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClaimSteelTree", "ClaimSteelTree\ClaimSteelTree.csproj", "{82E04408-EAA1-406D-AD3F-7FBA3001EDF9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeaderboardTreeChecker", "LeaderboardTreeChecker\LeaderboardTreeChecker.csproj", "{9497C342-7CA0-4BBA-BF39-53BAED8ADC4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MintForestBase", "MintForestBase\MintForestBase.csproj", "{E75ADCEF-FA6F-45B6-BA4B-BF4A80702964}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +52,13 @@ Global
 		{82E04408-EAA1-406D-AD3F-7FBA3001EDF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82E04408-EAA1-406D-AD3F-7FBA3001EDF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82E04408-EAA1-406D-AD3F-7FBA3001EDF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9497C342-7CA0-4BBA-BF39-53BAED8ADC4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9497C342-7CA0-4BBA-BF39-53BAED8ADC4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9497C342-7CA0-4BBA-BF39-53BAED8ADC4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9497C342-7CA0-4BBA-BF39-53BAED8ADC4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E75ADCEF-FA6F-45B6-BA4B-BF4A80702964}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E75ADCEF-FA6F-45B6-BA4B-BF4A80702964}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E75ADCEF-FA6F-45B6-BA4B-BF4A80702964}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E75ADCEF-FA6F-45B6-BA4B-BF4A80702964}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
