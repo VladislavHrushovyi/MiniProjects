@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MintTreeSearcher\MintTreeSearcher.csproj" />
+      <ProjectReference Include="..\MintForestBase\MintForestBase.csproj" />
     </ItemGroup>
 
 </Project>

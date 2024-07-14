@@ -1,5 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using MintTreeSearcher;
+﻿
+using MintForestBase;
 
 Console.WriteLine("Enter auth token");
 var authToken = Console.ReadLine();
