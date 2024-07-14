@@ -1,7 +1,8 @@
 ﻿using System.Net;
 using System.Text.Json;
+using MintForestBase.Models;
 
-namespace MintTreeSearcher;
+namespace MintForestBase;
 
 public class MintRequestSender(HttpClient httpClient)
 {
@@ -28,7 +29,7 @@ public class MintRequestSender(HttpClient httpClient)
             Console.WriteLine($"ERROR UserId {userId}");
         }
 
-        return new Response() { Result = new ItemsTree[] { new ItemsTree() { Amount = 3000, Stealable = false } } };
+        return new Response() { Result = new ItemsTree[] { new ItemsTree() { Amount = 0, Stealable = false } } };
     }
 
     public async Task<UserInfo> GetUserInfo(int treeId)
@@ -52,11 +53,11 @@ public class MintRequestSender(HttpClient httpClient)
         return new UserInfo() { Result = new Result() { Id = 0 } };
     }
 
-    public async Task<SteelResponse> SteelTree(int resultId)
+    public async Task<SteelResponse> SteelTree(int userId)
     {
         while (true)
         {
-            var uri = new Uri($"https://www.mintchain.io/api/tree/steal/claim?id={resultId}");
+            var uri = new Uri($"https://www.mintchain.io/api/tree/steal/claim?id={userId}");
             try
             {
                 await Task.Delay(100);
@@ -79,5 +80,27 @@ public class MintRequestSender(HttpClient httpClient)
         }
 
         return new SteelResponse() { SteelInfo = new SteelInfo() { Amount = 0 } };
+    }
+
+    public async Task<LeaderboardTrees> GetTreesByLeaderboardPage(int page)
+    {
+        var uri = new Uri($"https://www.mintchain.io/api/tree/leaderboard?page={page}");
+        try
+        {
+            var response = await httpClient.GetAsync(uri);
+            var jsonString = await response.Content.ReadAsStringAsync();
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var result = JsonSerializer.Deserialize<LeaderboardTrees>(jsonString);
+
+                return result;
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+
+        return new LeaderboardTrees() { Result = ArraySegment<UserLeaderboard>.Empty };
     }
 }

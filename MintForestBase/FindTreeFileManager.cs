@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace MintTreeSearcher;
+﻿namespace MintForestBase;
 
 public class FindTreeFileManager
 {

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace MintTreeSearcher;
+namespace MintForestBase.Models;
 
 public class SteelResponse
 {

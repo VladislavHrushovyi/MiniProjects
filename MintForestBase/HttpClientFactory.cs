@@ -1,8 +1,7 @@
-﻿using System.Collections.Concurrent;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Headers;
 
-namespace MintTreeSearcher;
+namespace MintForestBase;
 
 public class HttpClientFactory
 {
