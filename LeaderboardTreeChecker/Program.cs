@@ -1,6 +1,4 @@
-﻿
-using System.Globalization;
-using MintForestBase;
+﻿using MintForestBase;
 using MintForestBase.Models;
 
 Console.WriteLine("Enter auth token");
