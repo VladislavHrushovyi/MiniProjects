@@ -44,7 +44,14 @@ async Task DoClaim(HttpClient client, UserLeaderboard user)
 
 try
 {
-    IEnumerable<Task> tasks = Enumerable.Range(1, 20).Select(x => DoCheckLeaderboard(x));
+    List<Task> tasks = new List<Task>();
+    for (int i = 1; i <= 20; i++)
+    {
+        Console.WriteLine($"PAGE {i}");
+        DoCheckLeaderboard(i);
+        await Task.Delay(5000);
+    }
+
     await Task.WhenAll(tasks);
 }
 catch(Exception e)
