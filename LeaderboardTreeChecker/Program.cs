@@ -48,8 +48,8 @@ try
     for (int i = 1; i <= 20; i++)
     {
         Console.WriteLine($"PAGE {i}");
-        DoCheckLeaderboard(i);
-        await Task.Delay(5000);
+        tasks.Add(DoCheckLeaderboard(i));
+        await Task.Delay(3000);
     }
 
     await Task.WhenAll(tasks);
