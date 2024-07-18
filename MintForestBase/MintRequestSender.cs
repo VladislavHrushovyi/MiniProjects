@@ -17,7 +17,7 @@ public class MintRequestSender(HttpClient httpClient)
         {
             var response = await httpClient.GetAsync(uri);
             var jsonString = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(jsonString.Length > 1000 ? "MANY SYMBOLS RESPONSE" : jsonString);
+            //Console.WriteLine(jsonString.Length > 1000 ? "MANY SYMBOLS RESPONSE" : jsonString);
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var claimableInfo = JsonSerializer.Deserialize<Response>(jsonString);
