@@ -1,8 +1,7 @@
-﻿using System.Collections.Concurrent;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Headers;
 
-namespace MintTreeSearcher;
+namespace MintForestBase;
 
 public class HttpClientFactory
 {
@@ -17,14 +16,12 @@ public class HttpClientFactory
 
     private List<HttpClient> InitHttpClients()
     {
-        int index = 0;
         var httpClients = new List<HttpClient>();
         var proxies = File.ReadAllLines("./Proxy.txt");
         foreach (var proxy in proxies)
         {
             var configuredHttpClientState = BuildHttpClientState(proxy);
             httpClients.Add(configuredHttpClientState);
-            index++;
         }
         return httpClients;
     }
@@ -68,11 +65,4 @@ public class HttpClientFactory
         httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36");
         return httpClient;
     }
-}
-
-public class HttpClientState
-{
-    public int Id { get; set; }
-    public bool IsFree { get; set; }
-    public HttpClient HttpClient { get; set; }
 }

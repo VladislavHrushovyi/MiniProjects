@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using MintTreeSearcher;
+﻿using MintForestBase;
 
 Console.WriteLine("Enter auth token");
 var authToken = Console.ReadLine();
@@ -19,7 +18,7 @@ async Task DoClaim(HttpClient client, string id)
     var steelInfo = await mintClient.GetNotClaimedMintTree(userInfo.Result.Id);
     await Task.Delay(Random.Shared.Next(300, 400));
     
-    var validTree = steelInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 1500 });
+    var validTree = steelInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 2500 });
     if (validTree != default)
     {
         var result = await mintClient.SteelTree(userInfo.Result.Id);

@@ -1,4 +1,5 @@
-﻿using MintTreeSearcher;
+﻿
+using MintForestBase;
 
 Console.WriteLine("Enter auth token:");
 var authToken = Console.ReadLine();
@@ -19,10 +20,13 @@ fileManager.AppendLine($"\t RANGE {from}-{to} \n");
 async Task DoSearch(HttpClient client, int treeId)
 {
     MintRequestSender mintClient = new MintRequestSender(client);
+    
     var userInfo = await mintClient.GetUserInfo(treeId);
     await Task.Delay(400);
+    
     var claimableInfo = await mintClient.GetNotClaimedMintTree(userInfo.Result.Id);
     await Task.Delay(400);
+    
     if (claimableInfo.Result.Any())
     {
         var validObj = claimableInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 100 });
