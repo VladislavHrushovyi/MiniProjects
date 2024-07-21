@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeaderboardTreeChecker", "L
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MintForestBase", "MintForestBase\MintForestBase.csproj", "{E75ADCEF-FA6F-45B6-BA4B-BF4A80702964}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchUserNotClaimToday", "SearchUserNotClaimToday\SearchUserNotClaimToday.csproj", "{59A29BB4-F58B-4E63-ACD4-F61073F1EDFA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,5 +62,9 @@ Global
 		{E75ADCEF-FA6F-45B6-BA4B-BF4A80702964}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E75ADCEF-FA6F-45B6-BA4B-BF4A80702964}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E75ADCEF-FA6F-45B6-BA4B-BF4A80702964}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59A29BB4-F58B-4E63-ACD4-F61073F1EDFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59A29BB4-F58B-4E63-ACD4-F61073F1EDFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59A29BB4-F58B-4E63-ACD4-F61073F1EDFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59A29BB4-F58B-4E63-ACD4-F61073F1EDFA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
