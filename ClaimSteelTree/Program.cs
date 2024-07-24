@@ -25,14 +25,7 @@ async Task DoClaim(HttpClient[] clients, string id)
     if (validTree != default)
     {
         var result = await mintClient.SteelTree(userInfo.Result.Id);
-        if (result.SteelInfo.Amount != 0)
-        {
-            Console.WriteLine($"Steel  id {id}: {result.SteelInfo.Amount}ME");
-        }
-        else
-        {
-            Console.WriteLine("Null");
-        }
+        Console.WriteLine(result.SteelInfo.Amount != 0 ? $"Steel  id {id}: {result.SteelInfo.Amount}ME" : "Null");
     }
     else
     {
@@ -47,6 +40,7 @@ try
     List<Task> tasks = new List<Task>();
     var httpClientChunked = httpClientFactory.HttpClients.Chunk(3).ToList();
     int skip = 0;
+    
     foreach (var id in idsFromFile)
     {
         var task = DoClaim(httpClientChunked[skip], id);

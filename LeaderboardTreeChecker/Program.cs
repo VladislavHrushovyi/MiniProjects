@@ -12,7 +12,11 @@ async Task DoCheckLeaderboard(int page)
     var mintClient = new MintRequestSender(httpClients.HttpClients[^page]);
     var treesByPage = await mintClient.GetTreesByLeaderboardPage(page);
     //await Task.Delay(Random.Shared.Next(200, 300));
-    var clientsChunked = httpClients.HttpClients.Chunk(3).ToArray();
+    var clientsChunked = httpClients.HttpClients.Skip((page - 1) * 50 * 3)
+        .Take(50 * 3)
+        .Chunk(3)
+        .ToArray();
+    
     var indexClient = 0;
     if (treesByPage.Result.Any())
     {
@@ -50,6 +54,8 @@ async Task DoClaim(HttpClient[] clients, UserLeaderboard user)
 try
 {
     List<Task> tasks = new List<Task>();
+    Console.WriteLine($"Press any key to start {httpClients.HttpClients.Count}");
+    Console.ReadKey();
     for (int i = 1; i <= 20; i++)
     {
         Console.WriteLine($"PAGE {i}");
