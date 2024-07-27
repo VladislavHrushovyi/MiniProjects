@@ -10,12 +10,14 @@ public class MintRequestSender(HttpClient httpClient)
     {
         httpClient = newClient;
     }
+
     public async Task<Response> GetNotClaimedMintTree(int userId)
     {
         if (userId == 0)
         {
             return new Response() { Result = new ItemsTree[] { new ItemsTree() { Amount = 1, Stealable = false } } };
         }
+
         var uri = new Uri($"https://www.mintchain.io/api/tree/steal/energy-list?id={userId}");
         try
         {
@@ -74,14 +76,14 @@ public class MintRequestSender(HttpClient httpClient)
                     var steelResponse = JsonSerializer.Deserialize<SteelResponse>(jsonString);
                     if (steelResponse.SteelInfo.Amount > 0)
                     {
-                        return steelResponse;   
+                        return steelResponse;
                     }
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-            }   
+            }
         }
 
         return new SteelResponse() { SteelInfo = new SteelInfo() { Amount = 0 } };
@@ -107,5 +109,35 @@ public class MintRequestSender(HttpClient httpClient)
         }
 
         return new LeaderboardTrees() { Result = ArraySegment<UserLeaderboard>.Empty };
+    }
+
+    public async Task<UserActivity> GetUserActivity(int treeId)
+    {
+        var uri = new Uri($"https://www.mintchain.io/api/tree/activity?page=1&treeid={treeId}");
+        try
+        {
+            var response = await httpClient.GetAsync(uri);
+            var jsonString = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                var result = JsonSerializer.Deserialize<UserActivity>(jsonString);
+                return result;
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+
+        return new UserActivity()
+        {
+            Result = new[]
+            {
+                new ActivityItem()
+                {
+                    Amount = 0, Type = "", ClaimAt = DateTime.MinValue
+                }
+            }
+        };
     }
 }
