@@ -13,7 +13,7 @@ int to = Int32.Parse(Console.ReadLine());
 Console.WriteLine("Enter more than:");
 int moreThan = Int32.Parse(Console.ReadLine());
 
-FindTreeFileManager fileManager = new FindTreeFileManager();
+FindTreeFileManager fileManager = new FindTreeFileManager("Trees.txt");
 var httpClientsFactory = new HttpClientFactory(authToken);
 
 fileManager.AppendLine($"\t RANGE {from}-{to} \n");

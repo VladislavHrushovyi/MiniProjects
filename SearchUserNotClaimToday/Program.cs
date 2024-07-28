@@ -4,16 +4,7 @@ using MintForestBase.Models;
 
 Console.WriteLine("Enter auth token");
 var authToken = Console.ReadLine();
-FileStream writer;
-if (File.Exists("IdsNotToday.txt"))
-{
-    File.Delete("IdsNotToday.txt");
-    writer = File.OpenWrite("IdsNotToday.txt");
-}
-else
-{
-    writer = File.OpenWrite("IdsNotToday.txt");
-}
+var fileWriter = new FindTreeFileManager("IdsNotClaimedToday.txt");
 var httpClients = new HttpClientFactory(authToken);
 
 async Task DoFetchPage(int page)
@@ -45,9 +36,8 @@ async Task DoCheckUser(HttpClient[] clients, UserLeaderboard user)
         var firstDaily = activitiesList.Result.FirstOrDefault(x => x.Type == "daily");
         if (firstDaily != default && firstDaily.ClaimAt.Date != DateTime.Now.Date && firstDaily.Amount > 8000)
         {
-            //File.AppendAllText("./Ids.txt", $"{user.TreeId} -- {firstDaily.Amount} \n");
-            Console.WriteLine($"{user.TreeId} -- {firstDaily.Amount}");
-            await writer.WriteAsync(Encoding.UTF8.GetBytes($"{user.TreeId} -- {firstDaily.Amount}ME \n"));
+            Console.WriteLine($"{user.TreeId} -- {firstDaily.Amount}ME");
+            fileWriter.AppendLine($"{user.TreeId} -- {firstDaily.Amount}ME \n");
         }
     }
 }
@@ -69,7 +59,6 @@ catch (Exception e)
 {
     Console.WriteLine(e.Message);
 }
-writer.Close();
 Console.WriteLine("Finish. Press any key for exit");
 Console.ReadKey();
 
