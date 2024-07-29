@@ -12,22 +12,18 @@ async Task DoFetchPage(int page)
     var mintClient = new MintRequestSender(httpClients.HttpClients[^page]);
     var treesByPage = await mintClient.GetTreesByLeaderboardPage(page);
     await Task.Delay(Random.Shared.Next(100, 200));
-    var clientsChunked = httpClients.HttpClients.Skip((page - 1) * 50)
-        .Take(50)
-        .ToArray();
     
     var indexClient = 0;
     if (treesByPage.Result.Any())
     {
-        IEnumerable<Task> tasks = treesByPage.Result.Select(x => DoCheckUser(clientsChunked,x));
+        IEnumerable<Task> tasks = treesByPage.Result.Select(x => DoCheckUser(httpClients.HttpClients[indexClient++],x));
         await Task.WhenAll(tasks);
     }
 }
 
-async Task DoCheckUser(HttpClient[] clients, UserLeaderboard user)
+async Task DoCheckUser(HttpClient client, UserLeaderboard user)
 {
-    int clientIndex = 0;
-    var mintRequestSender = new MintRequestSender(clients[clientIndex]);
+    var mintRequestSender = new MintRequestSender(client);
 
     var activitiesList = await mintRequestSender.GetUserActivity(user.TreeId);
     
