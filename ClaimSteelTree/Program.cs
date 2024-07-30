@@ -13,13 +13,14 @@ async Task DoClaim(HttpClient client, string id)
     
     var idNumber = Int32.Parse(id);
     var userInfo = await mintClient.GetUserInfo(idNumber);
-    await Task.Delay(150);
+    await Task.Delay(Random.Shared.Next(150, 250));
     
     var steelInfo = await mintClient.GetNotClaimedMintTree(userInfo.Result.Id);
     
     var validTree = steelInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 3000 });
     if (validTree != default)
     {
+        await Task.Delay(400);
         var result = await mintClient.SteelTree(userInfo.Result.Id);
         Console.WriteLine(result.SteelInfo.Amount != 0 ? $"Steel  id {id}: {result.SteelInfo.Amount}ME" : "Null");
     }
