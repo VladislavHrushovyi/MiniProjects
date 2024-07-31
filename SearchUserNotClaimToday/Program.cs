@@ -1,5 +1,4 @@
-﻿using System.Text;
-using MintForestBase;
+﻿using MintForestBase;
 using MintForestBase.Models;
 
 Console.WriteLine("Enter auth token");
@@ -33,7 +32,7 @@ async Task DoCheckUser(HttpClient client, UserLeaderboard user)
         if (firstDaily != default && firstDaily.ClaimAt.Date != DateTime.Now.Date && firstDaily.Amount > 8000)
         {
             Console.WriteLine($"{user.TreeId} -- {firstDaily.Amount}ME");
-            fileWriter.AppendLine($"{user.TreeId} -- {firstDaily.Amount}ME \n");
+            fileWriter.AppendLine($"UserId = {user.Id} -- TreeId = {user.TreeId} -- {firstDaily.Amount}ME \n");
         }
     }
 }

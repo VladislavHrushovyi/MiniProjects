@@ -67,7 +67,7 @@ public class MintRequestSender(HttpClient httpClient)
             var uri = new Uri($"https://www.mintchain.io/api/tree/steal/claim?id={userId}");
             try
             {
-                await Task.Delay(100);
+                await Task.Delay(Random.Shared.Next(150, 200));
                 var response = await httpClient.GetAsync(uri);
                 var jsonString = await response.Content.ReadAsStringAsync();
                 Console.WriteLine(jsonString.Length > 1000 ? "MANY SYMBOLS RESPONSE" : jsonString);
