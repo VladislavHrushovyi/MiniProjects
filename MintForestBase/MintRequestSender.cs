@@ -23,6 +23,11 @@ public class MintRequestSender(HttpClient httpClient)
         {
             var response = await httpClient.GetAsync(uri);
             var jsonString = await response.Content.ReadAsStringAsync();
+            if (jsonString.Contains("else") || jsonString.Contains("owner"))
+            {
+                return new Response()
+                    { Result = new ItemsTree[] { new ItemsTree() { Amount = 0, Stealable = false } } };
+            }
             Console.WriteLine(jsonString.Length > 1000 ? "MANY SYMBOLS RESPONSE" : jsonString);
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -67,10 +72,20 @@ public class MintRequestSender(HttpClient httpClient)
             var uri = new Uri($"https://www.mintchain.io/api/tree/steal/claim?id={userId}");
             try
             {
-                await Task.Delay(Random.Shared.Next(900, 1100));
                 var response = await httpClient.GetAsync(uri);
+                await Task.Delay(Random.Shared.Next(900, 1100));
                 var jsonString = await response.Content.ReadAsStringAsync();
                 Console.WriteLine(jsonString.Length > 1000 ? "MANY SYMBOLS RESPONSE" : jsonString);
+                if (jsonString.Contains("Freq"))
+                {
+                    await Task.Delay(2000);
+                    continue;
+                }
+
+                if (jsonString.Contains("now"))
+                {
+                    return new SteelResponse() { SteelInfo = new SteelInfo() { Amount = 0 } };
+                }
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     var steelResponse = JsonSerializer.Deserialize<SteelResponse>(jsonString);
