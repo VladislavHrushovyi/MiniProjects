@@ -78,11 +78,11 @@ public class MintRequestSender(HttpClient httpClient)
                 Console.WriteLine(jsonString.Length > 1000 ? "MANY SYMBOLS RESPONSE" : jsonString);
                 if (jsonString.Contains("Freq"))
                 {
-                    await Task.Delay(2000);
+                    await Task.Delay(2500);
                     continue;
                 }
 
-                if (jsonString.Contains("now"))
+                if (jsonString.Contains("late"))
                 {
                     return new SteelResponse() { SteelInfo = new SteelInfo() { Amount = 0 } };
                 }
