@@ -76,7 +76,7 @@ public class MintRequestSender(HttpClient httpClient)
                 await Task.Delay(Random.Shared.Next(900, 1100));
                 var jsonString = await response.Content.ReadAsStringAsync();
                 Console.WriteLine(jsonString.Length > 1000 ? "MANY SYMBOLS RESPONSE" : jsonString);
-                if (jsonString.Contains("Freq"))
+                if (jsonString.Contains("operations"))
                 {
                     await Task.Delay(2500);
                     continue;
