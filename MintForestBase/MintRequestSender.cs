@@ -78,7 +78,7 @@ public class MintRequestSender(HttpClient httpClient)
                 Console.WriteLine(jsonString.Length > 1000 ? "MANY SYMBOLS RESPONSE" : jsonString);
                 if (jsonString.Contains("operations"))
                 {
-                    await Task.Delay(2500);
+                    await Task.Delay(3500);
                     continue;
                 }
 
