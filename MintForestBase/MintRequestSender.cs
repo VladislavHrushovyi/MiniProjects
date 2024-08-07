@@ -28,7 +28,7 @@ public class MintRequestSender(HttpClient httpClient)
                 return new Response()
                     { Result = new ItemsTree[] { new ItemsTree() { Amount = 0, Stealable = false } } };
             }
-            //Console.WriteLine(jsonString.Length > 1000 ? "MANY SYMBOLS RESPONSE" : jsonString);
+            Console.WriteLine(jsonString.Length > 1000 ? "MANY SYMBOLS RESPONSE" : jsonString);
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var claimableInfo = JsonSerializer.Deserialize<Response>(jsonString);
@@ -73,16 +73,10 @@ public class MintRequestSender(HttpClient httpClient)
             try
             {
                 var response = await httpClient.GetAsync(uri);
-                await Task.Delay(Random.Shared.Next(900, 1100));
                 var jsonString = await response.Content.ReadAsStringAsync();
                 Console.WriteLine(jsonString.Length > 1000 ? "MANY SYMBOLS RESPONSE" : jsonString);
-                if (jsonString.Contains("operations"))
-                {
-                    await Task.Delay(3500);
-                    continue;
-                }
-
-                if (jsonString.Contains("late"))
+                
+                if (jsonString.Contains("late") || jsonString.Contains("can"))
                 {
                     return new SteelResponse() { SteelInfo = new SteelInfo() { Amount = 0 } };
                 }

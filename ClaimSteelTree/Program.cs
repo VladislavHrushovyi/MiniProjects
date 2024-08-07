@@ -28,8 +28,6 @@ async Task DoClaim(HttpClient client, string id)
     // {
     //     Console.WriteLine($"Not stolen {id}");
     // }
-
-    await Task.Delay(1500);
 }
 
 try
@@ -39,10 +37,10 @@ try
 
     foreach (var id in idsFromFile)
     {
-        var task = DoClaim(httpClientFactory.HttpClients[skip++], id);
+        var task = DoClaim(httpClientFactory.GetDefaultHttpClient(), id);
         tasks.Add(task);
         skip++;
-        await Task.Delay(2000);
+        await Task.Delay(100);
     }
 
     await Task.WhenAll(tasks);

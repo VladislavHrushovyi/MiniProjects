@@ -8,14 +8,14 @@ var httpClients = new HttpClientFactory(authToken);
 
 async Task DoFetchPage(int page)
 {
-    var mintClient = new MintRequestSender(httpClients.HttpClients[^page]);
+    var mintClient = new MintRequestSender(httpClients.GetDefaultHttpClient());
     var treesByPage = await mintClient.GetTreesByLeaderboardPage(page);
     await Task.Delay(Random.Shared.Next(100, 200));
     
     var indexClient = 0;
     if (treesByPage.Result.Any())
     {
-        IEnumerable<Task> tasks = treesByPage.Result.Select(x => DoCheckUser(httpClients.HttpClients[indexClient++],x));
+        IEnumerable<Task> tasks = treesByPage.Result.Select(x => DoCheckUser(httpClients.GetDefaultHttpClient(),x));
         await Task.WhenAll(tasks);
     }
 }

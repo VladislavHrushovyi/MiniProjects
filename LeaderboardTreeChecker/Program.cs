@@ -9,17 +9,17 @@ var httpClients = new HttpClientFactory(authToken);
 async Task DoCheckLeaderboard(int page)
 {
     
-    var mintClient = new MintRequestSender(httpClients.HttpClients[^page]);
+    var mintClient = new MintRequestSender(httpClients.GetDefaultHttpClient());
     var treesByPage = await mintClient.GetTreesByLeaderboardPage(page);
-    await Task.Delay(Random.Shared.Next(150, 250));
-    var clientsChunked = httpClients.HttpClients.Skip((page - 1) * 50)
-        .Take(50)
-        .ToArray();
+    //await Task.Delay(Random.Shared.Next(250, 350));
+    // var clientsChunked = httpClients.HttpClients.Skip((page - 1) * 50)
+    //     .Take(50)
+    //     .ToArray();
     
     var indexClient = 0;
     if (treesByPage.Result.Any())
     {
-        IEnumerable<Task> tasks = treesByPage.Result.Select(x => DoClaim(clientsChunked[indexClient++],x));
+        IEnumerable<Task> tasks = treesByPage.Result.Select(x => DoClaim(httpClients.GetDefaultHttpClient(),x));
         await Task.WhenAll(tasks);
     }
 }
@@ -31,7 +31,7 @@ async Task DoClaim(HttpClient client, UserLeaderboard user)
     var steelInfo = await mintRequestSender.GetNotClaimedMintTree(user.Id);
     //clientIndex += 1;
     
-    await Task.Delay(Random.Shared.Next(100, 200));
+    await Task.Delay(Random.Shared.Next(200, 400));
     if (steelInfo.Result.Any())
     {
         var validTree = steelInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 1000 });
@@ -58,7 +58,7 @@ try
     {
         Console.WriteLine($"PAGE {i}");
         tasks.Add(DoCheckLeaderboard(i));
-        await Task.Delay(1000);
+        await Task.Delay(1500);
     }
 
     await Task.WhenAll(tasks);
