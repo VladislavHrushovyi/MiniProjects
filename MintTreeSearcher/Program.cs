@@ -13,7 +13,7 @@ int to = Int32.Parse(Console.ReadLine());
 Console.WriteLine("Enter more than:");
 int moreThan = Int32.Parse(Console.ReadLine());
 
-FindTreeFileManager fileManager = new FindTreeFileManager();
+FindTreeFileManager fileManager = new FindTreeFileManager("Trees.txt");
 var httpClientsFactory = new HttpClientFactory(authToken);
 
 fileManager.AppendLine($"\t RANGE {from}-{to} \n");
@@ -36,6 +36,8 @@ async Task DoSearch(HttpClient client, int treeId)
             Console.WriteLine(validObj.Amount >= moreThan ? output +  " \t <<--- BINGO" : output);
             if (validObj.Amount >= moreThan)
             {
+                var result = await mintClient.SteelTree(userInfo.Result.Id);
+                Console.WriteLine($"Steel {result.SteelInfo.Amount}ME <----- STEELING");
                 string line = $"https://www.mintchain.io/mint-forest?id={treeId} ---> {validObj.Amount}ME \n";
                 fileManager.AppendLine(line);
             }
@@ -57,8 +59,8 @@ try
     int amountIds = to - from;
     int amountProxy = httpClientsFactory.HttpClients.Count;
     var tasks = Enumerable.Range(from, amountIds)
-        .Chunk(amountIds / amountProxy)
-        .Select(x => DoSearchChunk(httpClientsFactory.HttpClients[index++], x));
+        .Chunk(100)
+        .Select(x => DoSearchChunk(httpClientsFactory.GetDefaultHttpClient(), x));
     await Task.WhenAll(tasks);
 }
 catch (Exception e)

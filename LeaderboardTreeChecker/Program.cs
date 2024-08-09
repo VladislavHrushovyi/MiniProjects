@@ -9,22 +9,29 @@ var httpClients = new HttpClientFactory(authToken);
 async Task DoCheckLeaderboard(int page)
 {
     
-    var mintClient = new MintRequestSender(httpClients.HttpClients[page - 1]);
+    var mintClient = new MintRequestSender(httpClients.GetDefaultHttpClient());
     var treesByPage = await mintClient.GetTreesByLeaderboardPage(page);
-    await Task.Delay(Random.Shared.Next(200, 300));
-    var indexClient = page * treesByPage.Result.Count() - treesByPage.Result.Count();
+    //await Task.Delay(Random.Shared.Next(250, 350));
+    // var clientsChunked = httpClients.HttpClients.Skip((page - 1) * 50)
+    //     .Take(50)
+    //     .ToArray();
+    
+    var indexClient = 0;
     if (treesByPage.Result.Any())
     {
-        IEnumerable<Task> tasks = treesByPage.Result.Select(x => DoClaim(httpClients.HttpClients[indexClient++],x));
+        IEnumerable<Task> tasks = treesByPage.Result.Select(x => DoClaim(httpClients.GetDefaultHttpClient(),x));
         await Task.WhenAll(tasks);
     }
 }
 
 async Task DoClaim(HttpClient client, UserLeaderboard user)
 {
+    //int clientIndex = 0;
     var mintRequestSender = new MintRequestSender(client);
     var steelInfo = await mintRequestSender.GetNotClaimedMintTree(user.Id);
-    await Task.Delay(Random.Shared.Next(200, 300));
+    //clientIndex += 1;
+    
+    await Task.Delay(Random.Shared.Next(200, 400));
     if (steelInfo.Result.Any())
     {
         var validTree = steelInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 1000 });
@@ -34,8 +41,9 @@ async Task DoClaim(HttpClient client, UserLeaderboard user)
             Console.WriteLine(validTree.Amount >= 1000 ? output +  " \t <<--- BINGO" : output);
             if (validTree.Amount >= 3000)
             {
+                //mintRequestSender.ChangeHttpClient(clients[clientIndex]);
                 var steelingResult = await mintRequestSender.SteelTree(user.Id);
-                await Task.Delay(Random.Shared.Next(200, 300));
+                //await Task.Delay(Random.Shared.Next(200, 300));
                 Console.WriteLine($"STEELING treeId {user.TreeId} Amount {steelingResult.SteelInfo.Amount}");
             }
         }
@@ -45,11 +53,12 @@ async Task DoClaim(HttpClient client, UserLeaderboard user)
 try
 {
     List<Task> tasks = new List<Task>();
+    
     for (int i = 1; i <= 20; i++)
     {
         Console.WriteLine($"PAGE {i}");
         tasks.Add(DoCheckLeaderboard(i));
-        await Task.Delay(3000);
+        await Task.Delay(1500);
     }
 
     await Task.WhenAll(tasks);

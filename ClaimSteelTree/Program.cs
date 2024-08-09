@@ -10,48 +10,45 @@ HttpClientFactory httpClientFactory = new HttpClientFactory(authToken);
 async Task DoClaim(HttpClient client, string id)
 {
     MintRequestSender mintClient = new MintRequestSender(client);
-    
+
     var idNumber = Int32.Parse(id);
-    var userInfo = await mintClient.GetUserInfo(idNumber);
-    await Task.Delay(400);
-    
-    var steelInfo = await mintClient.GetNotClaimedMintTree(userInfo.Result.Id);
-    await Task.Delay(Random.Shared.Next(300, 400));
-    
-    var validTree = steelInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 2500 });
-    if (validTree != default)
-    {
-        var result = await mintClient.SteelTree(userInfo.Result.Id);
-        if (result.SteelInfo.Amount != 0)
-        {
-            Console.WriteLine($"Steel  id {id}: {result.SteelInfo.Amount}ME");
-        }
-        else
-        {
-            Console.WriteLine("Null");
-        }
-    }
-    else
-    {
-        Console.WriteLine($"Not stolen {id}");
-    }
-    
-    await Task.Delay(400);
+    // var userInfo = await mintClient.GetUserInfo(idNumber);
+    // await Task.Delay(Random.Shared.Next(150, 250));
+    //
+    // var steelInfo = await mintClient.GetNotClaimedMintTree(userInfo.Result.Id);
+    //
+    // var validTree = steelInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 3000 });
+    // if (validTree != default)
+    // {
+    //await Task.Delay(400);
+    var result = await mintClient.SteelTree(idNumber);
+    Console.WriteLine(result.SteelInfo.Amount != 0 ? $"Steel  id {id}: {result.SteelInfo.Amount}ME" : "Null");
+    // }
+    // else
+    // {
+    //     Console.WriteLine($"Not stolen {id}");
+    // }
 }
 
 try
 {
-    foreach (var idChunk in idsFromFile.Chunk(httpClientFactory.HttpClients.Count))
+    List<Task> tasks = new List<Task>();
+    int skip = 0;
+
+    foreach (var id in idsFromFile)
     {
-        int index = 0;
-        IEnumerable<Task> tasks = idChunk.Select(x => DoClaim(httpClientFactory.HttpClients[index++], x));
-        await Task.WhenAll(tasks);
-        index = 0;
+        var task = DoClaim(httpClientFactory.GetDefaultHttpClient(), id);
+        tasks.Add(task);
+        skip++;
+        await Task.Delay(100);
     }
+
+    await Task.WhenAll(tasks);
 }
 catch (Exception e)
 {
     Console.WriteLine(e);
 }
+
 Console.WriteLine("Finish press F to close");
 Console.ReadKey();

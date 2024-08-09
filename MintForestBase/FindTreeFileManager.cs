@@ -2,10 +2,11 @@
 
 public class FindTreeFileManager
 {
-    private const string _fileName = "Trees.txt";
+    private readonly string _fileName;
     private readonly object _lock = new();
-    public FindTreeFileManager()
+    public FindTreeFileManager(string fileName)
     {
+        _fileName = fileName;
         if (File.Exists(_fileName) )
         {
             var lastAccessTime = File.GetLastAccessTime(_fileName);
