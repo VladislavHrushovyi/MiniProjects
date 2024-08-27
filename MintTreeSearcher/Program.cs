@@ -59,7 +59,7 @@ try
     int amountIds = to - from;
     int amountProxy = httpClientsFactory.HttpClients.Count;
     var tasks = Enumerable.Range(from, amountIds)
-        .Chunk(100)
+        .Chunk(amountIds / 100)
         .Select(x => DoSearchChunk(httpClientsFactory.GetDefaultHttpClient(), x));
     await Task.WhenAll(tasks);
 }
