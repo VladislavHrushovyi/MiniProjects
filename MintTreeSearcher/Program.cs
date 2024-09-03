@@ -36,8 +36,8 @@ async Task DoSearch(HttpClient client, int treeId)
             Console.WriteLine(validObj.Amount >= moreThan ? output +  " \t <<--- BINGO" : output);
             if (validObj.Amount >= moreThan)
             {
-                var result = await mintClient.SteelTree(userInfo.Result.Id);
-                Console.WriteLine($"Steel {result.SteelInfo.Amount}ME <----- STEELING");
+                //var result = await mintClient.SteelTree(userInfo.Result.Id);
+                //Console.WriteLine($"Steel {result.SteelInfo.Amount}ME <----- STEELING");
                 string line = $"https://www.mintchain.io/mint-forest?id={treeId} ---> {validObj.Amount}ME \n";
                 fileManager.AppendLine(line);
             }
