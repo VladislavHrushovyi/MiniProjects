@@ -41,11 +41,11 @@ async Task DoClaim(HttpClient client, UserLeaderboard user)
             Console.WriteLine(validTree.Amount >= 1000 ? output +  " \t <<--- BINGO" : output);
             if (validTree.Amount >= 3000)
             {
-                mintRequestSender.ChangeHttpClient(httpClients.HttpClients[Random.Shared.Next(0, httpClients.HttpClients.Count - 1)]);
+                //mintRequestSender.ChangeHttpClient(httpClients.HttpClients[Random.Shared.Next(0, httpClients.HttpClients.Count - 1)]);
                 //mintRequestSender.ChangeHttpClient(clients[clientIndex]);
-                var steelingResult = await mintRequestSender.SteelTree(user.Id);
+                //var steelingResult = await mintRequestSender.SteelTree(user.Id);
                 //await Task.Delay(Random.Shared.Next(200, 300));
-                Console.WriteLine($"STEELING treeId {user.TreeId} Amount {steelingResult.SteelInfo.Amount}");
+                //Console.WriteLine($"STEELING treeId {user.TreeId} Amount {steelingResult.SteelInfo.Amount}");
             }
         }
     }

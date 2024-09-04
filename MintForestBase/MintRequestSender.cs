@@ -149,4 +149,27 @@ public class MintRequestSender(HttpClient httpClient)
             }
         };
     }
+
+    public async Task<ProofModel> GetProofSteal(int userId)
+    {
+        var uri = new Uri($"https://www.mintchain.io/api/tree/get-forest-proof?type=Steal&id={userId}");
+
+        try
+        {
+            var response = await httpClient.GetAsync(uri);
+            var jsonString = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                var result = JsonSerializer.Deserialize<ProofModel>(jsonString);
+                return result;
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+
+        return new ProofModel() { Result = new ProofResult() { Amount = 0, Tx = String.Empty } };
+    }
 }

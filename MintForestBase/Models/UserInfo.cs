@@ -12,4 +12,7 @@ public class Result
 {
     [JsonPropertyName("id")]
     public int Id { get; set; }
+
+    [JsonPropertyName("address")]
+    public string Address { get; set; }
 }
