@@ -20,6 +20,7 @@ async Task DoCheckLeaderboard(int page)
 
 async Task DoClaim(HttpClient client, UserLeaderboard user)
 {
+    await Task.Delay(Random.Shared.Next(100, 500));
     var mintRequestSender = new MintRequestSender(client);
     var steelInfo = await mintRequestSender.GetNotClaimedMintTree(user.Id);
     
@@ -54,6 +55,7 @@ try
     {
         Console.WriteLine($"PAGE {i}");
         tasks.Add(DoCheckLeaderboard(i));
+        await Task.Delay(2000);
     }
 
     await Task.WhenAll(tasks);

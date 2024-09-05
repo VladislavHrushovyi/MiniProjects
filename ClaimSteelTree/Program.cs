@@ -7,6 +7,9 @@ var idsFromFile = File.ReadAllLines("./Ids.txt");
 
 HttpClientFactory httpClientFactory = new HttpClientFactory(configs.GetValue("AuthToken"));
 
+Console.WriteLine("Press any button to start...");
+Console.ReadKey();
+
 async Task DoClaim(HttpClient client, string id)
 {
     MintRequestSender mintClient = new MintRequestSender(client);
