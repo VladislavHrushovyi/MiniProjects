@@ -63,7 +63,6 @@ async Task DoSearchChunk(HttpClient client, IEnumerable<int> treeIds)
 
 try
 {
-    int index = 0;
     int amountIds = to - from;
     int amountProxy = httpClientsFactory.HttpClients.Count;
     var tasks = Enumerable.Range(from, amountIds)

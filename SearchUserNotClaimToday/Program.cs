@@ -1,16 +1,15 @@
 ﻿using MintForestBase;
 using MintForestBase.Models;
 
-Console.WriteLine("Enter auth token");
-var authToken = Console.ReadLine();
+var configs = new SettingsLoader();
+
 var fileWriter = new FindTreeFileManager("IdsNotClaimedToday.txt");
-var httpClients = new HttpClientFactory(authToken);
+var httpClients = new HttpClientFactory(configs.GetValue("AuthToken"));
 
 async Task DoFetchPage(int page)
 {
     var mintClient = new MintRequestSender(httpClients.GetDefaultHttpClient());
     var treesByPage = await mintClient.GetTreesByLeaderboardPage(page);
-    await Task.Delay(Random.Shared.Next(100, 200));
     
     var indexClient = 0;
     if (treesByPage.Result.Any())
@@ -45,7 +44,7 @@ try
     {
         Console.WriteLine($"PAGE {i}");
         tasks.Add(DoFetchPage(i));
-        await Task.Delay(1000);
+        await Task.Delay(500);
     }
 
     await Task.WhenAll(tasks);

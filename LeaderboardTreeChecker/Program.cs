@@ -23,7 +23,6 @@ async Task DoClaim(HttpClient client, UserLeaderboard user)
     var mintRequestSender = new MintRequestSender(client);
     var steelInfo = await mintRequestSender.GetNotClaimedMintTree(user.Id);
     
-    await Task.Delay(Random.Shared.Next(200, 400));
     if (steelInfo.Result.Any())
     {
         var validTree = steelInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 1000 });
