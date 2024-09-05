@@ -1,6 +1,8 @@
 ﻿using MintForestBase;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
+using Nethereum.RPC.Eth.DTOs;
+using Nethereum.Util;
 using Nethereum.Web3;
 using Nethereum.Web3.Accounts;
 
@@ -9,7 +11,7 @@ var httpClient =
             "eyJhbGciOiJIUzI1NiJ9.eyJhZGRyZXNzIjoiMHhlZTg5OTg0YzFjZTVhYTZiYThlNGQ4YWUxMGQyNTQ3YzY3YmM2Njk1IiwidWlkIjoxMjg3MTksImV4cCI6MTcyNTYxNDMzMX0.zxicfvotuIQ5hYVx77989MnoDxNPF49eTyN8ImPbe_A")
         .GetDefaultHttpClient();
 var mintClient = new MintRequestSender(httpClient);
-var treeId = 58750;
+var treeId = 401402;
 
 var userInfo = await mintClient.GetUserInfo(treeId);
 
@@ -31,31 +33,44 @@ var proofResult = await mintClient.GetProofSteal(userInfo.Result.Id);
 //     proofResult.Result.Tx.HexToByteArray());
 // Console.WriteLine(receipt.TransactionHash);
 
-string privateKey = "";
-string rpcUrl = "https://rpc.mintchain.io"; // або інший URL
-string proxyContractAddress = "0x12906892AaA384ad59F2c431867af6632c68100a";
-string implementationContractAddress = "0xA2558D5e411a5A75Ff4580c9757f822D4834A2e9"; // Отримана з проксі
-var abi = """[ { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [ { "internalType": "address", "name": "target", "type": "address" } ], "name": "AddressEmptyCode", "type": "error" }, { "inputs": [], "name": "DuplicateData", "type": "error" }, { "inputs": [], "name": "ECDSAInvalidSignature", "type": "error" }, { "inputs": [ { "internalType": "uint256", "name": "length", "type": "uint256" } ], "name": "ECDSAInvalidSignatureLength", "type": "error" }, { "inputs": [ { "internalType": "bytes32", "name": "s", "type": "bytes32" } ], "name": "ECDSAInvalidSignatureS", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "implementation", "type": "address" } ], "name": "ERC1967InvalidImplementation", "type": "error" }, { "inputs": [], "name": "ERC1967NonPayable", "type": "error" }, { "inputs": [], "name": "FailedInnerCall", "type": "error" }, { "inputs": [], "name": "InvalidInitialization", "type": "error" }, { "inputs": [], "name": "InvalidPoint", "type": "error" }, { "inputs": [], "name": "InvalidSignature", "type": "error" }, { "inputs": [], "name": "InvalidTime", "type": "error" }, { "inputs": [], "name": "NotInitializing", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" } ], "name": "OwnableInvalidOwner", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" } ], "name": "OwnableUnauthorizedAccount", "type": "error" }, { "inputs": [], "name": "UUPSUnauthorizedCallContext", "type": "error" }, { "inputs": [ { "internalType": "bytes32", "name": "slot", "type": "bytes32" } ], "name": "UUPSUnsupportedProxiableUUID", "type": "error" }, { "anonymous": false, "inputs": [], "name": "EIP712DomainChanged", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "internalType": "uint64", "name": "version", "type": "uint64" } ], "name": "Initialized", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "user", "type": "address" }, { "indexed": true, "internalType": "uint256", "name": "rewardId", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "point", "type": "uint256" } ], "name": "OpenReward", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" } ], "name": "OwnershipTransferred", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "user", "type": "address" }, { "indexed": true, "internalType": "uint64", "name": "time", "type": "uint64" }, { "indexed": false, "internalType": "uint256", "name": "point", "type": "uint256" } ], "name": "Signin", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "user", "type": "address" }, { "indexed": true, "internalType": "address", "name": "target", "type": "address" }, { "indexed": true, "internalType": "uint64", "name": "time", "type": "uint64" }, { "indexed": false, "internalType": "uint256", "name": "point", "type": "uint256" } ], "name": "Steal", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "user", "type": "address" }, { "indexed": true, "internalType": "uint64", "name": "time", "type": "uint64" }, { "indexed": true, "internalType": "uint16", "name": "count", "type": "uint16" }, { "indexed": false, "internalType": "uint256", "name": "point", "type": "uint256" } ], "name": "Turntable", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "implementation", "type": "address" } ], "name": "Upgraded", "type": "event" }, { "inputs": [], "name": "UPGRADE_INTERFACE_VERSION", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "eip712Domain", "outputs": [ { "internalType": "bytes1", "name": "fields", "type": "bytes1" }, { "internalType": "string", "name": "name", "type": "string" }, { "internalType": "string", "name": "version", "type": "string" }, { "internalType": "uint256", "name": "chainId", "type": "uint256" }, { "internalType": "address", "name": "verifyingContract", "type": "address" }, { "internalType": "bytes32", "name": "salt", "type": "bytes32" }, { "internalType": "uint256[]", "name": "extensions", "type": "uint256[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "initialOwner", "type": "address" } ], "name": "initialize", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "components": [ { "internalType": "uint256", "name": "rewardId", "type": "uint256" }, { "internalType": "uint256", "name": "point", "type": "uint256" } ], "internalType": "struct RewardParams", "name": "params", "type": "tuple" }, { "internalType": "bytes", "name": "signature", "type": "bytes" } ], "name": "openReward", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "proxiableUUID", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "", "type": "address" }, { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "rewardRecord", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "newSigner", "type": "address" } ], "name": "setSigner", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "signer", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "components": [ { "internalType": "uint64", "name": "time", "type": "uint64" }, { "internalType": "uint256", "name": "point", "type": "uint256" } ], "internalType": "struct SigninParams", "name": "params", "type": "tuple" }, { "internalType": "bytes", "name": "signature", "type": "bytes" } ], "name": "signin", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "", "type": "address" }, { "internalType": "uint64", "name": "", "type": "uint64" } ], "name": "signinRecord", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "components": [ { "internalType": "address", "name": "target", "type": "address" }, { "internalType": "uint64", "name": "time", "type": "uint64" }, { "internalType": "uint256", "name": "point", "type": "uint256" } ], "internalType": "struct StealParams", "name": "params", "type": "tuple" }, { "internalType": "bytes", "name": "signature", "type": "bytes" } ], "name": "steal", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "", "type": "address" }, { "internalType": "uint64", "name": "", "type": "uint64" } ], "name": "stealRecord", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "newOwner", "type": "address" } ], "name": "transferOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "components": [ { "internalType": "uint64", "name": "time", "type": "uint64" }, { "internalType": "uint16", "name": "count", "type": "uint16" }, { "internalType": "uint256", "name": "point", "type": "uint256" } ], "internalType": "struct TurntableParams", "name": "params", "type": "tuple" }, { "internalType": "bytes", "name": "signature", "type": "bytes" } ], "name": "turntable", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "", "type": "address" }, { "internalType": "uint64", "name": "", "type": "uint64" }, { "internalType": "uint16", "name": "", "type": "uint16" } ], "name": "turntableRecord", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "newImplementation", "type": "address" }, { "internalType": "bytes", "name": "data", "type": "bytes" } ], "name": "upgradeToAndCall", "outputs": [], "stateMutability": "payable", "type": "function" } ]"""; // ABI реалізації контракту
+var url = "https://rpc.mintchain.io";
 
-var account = new Account(privateKey);
-var web3 = new Web3(account, rpcUrl);
+        var privateKey = "c69ba1592fb8403ad843691e959099141b27a5601e9b82d498e0026e567e348e";
+        var account = new Account(privateKey);
 
-// Отримання контракта
-var contract = web3.Eth.GetContract(abi, implementationContractAddress);
+        var web3 = new Web3(account, url);
 
-// Функція steal
-var stealFunction = contract.GetFunction("steal");
+        var contractAddress = "0x12906892AaA384ad59F2c431867af6632c68100a";
 
-// Параметри
-var targetAddress = userInfo.Result.Address;
-var time = (UInt64)DateTimeOffset.UtcNow.ToUnixTimeSeconds(); // або ваш час
-var point = 2012; // або ваша точка
-var signature = proofResult.Result.Tx; // Ваша підписана строка
+        var nonce = await web3.Eth.Transactions.GetTransactionCount.SendRequestAsync(account.Address);
 
-// Виклик функції
-var transactionInput = stealFunction.CreateTransactionInput(account.Address, new HexBigInteger(25000), new HexBigInteger(0), new HexBigInteger(0), new object[] { new { target = targetAddress, time = time, point = point }, signature.HexToByteArray() });
+        var gasPrice = Web3.Convert.ToWei(0.0001, UnitConversion.EthUnit.Gwei);
+        var gasLimit = 50000;
 
-var transactionHash = await web3.Eth.Transactions.SendTransaction.SendRequestAsync(transactionInput);
+        var transactionInput = new TransactionInput()
+        {
+            From = account.Address,
+            To = contractAddress,
+            Data = proofResult.Result.Tx,
+            Gas = new HexBigInteger(gasLimit),
+            GasPrice = new HexBigInteger(gasPrice),
+            Nonce = new HexBigInteger(nonce)
+        };
 
-Console.WriteLine($"Transaction Hash: {transactionHash}");
+        try
+        {
+            var transactionSigner = new AccountOfflineTransactionSigner();
+            var chainId = 185; // ID мережі (1 для mainnet, 3 для ropsten, тощо)
+            
+            // Створення необробленої транзакції для підписання
+            var rawTransaction = transactionSigner.SignTransaction(account, transactionInput, chainId);
+
+            // Відправка підписаної транзакції
+            var txHash = await web3.Eth.Transactions.SendRawTransaction.SendRequestAsync("0x" + rawTransaction);
+            Console.WriteLine($"Transaction Hash: {txHash}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
 
