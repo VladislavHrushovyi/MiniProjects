@@ -167,7 +167,6 @@ public class MintRequestSender(HttpClient httpClient)
         catch (Exception e)
         {
             Console.WriteLine(e);
-            throw;
         }
 
         return new ProofModel() { Result = new ProofResult() { Amount = 0, Tx = String.Empty } };

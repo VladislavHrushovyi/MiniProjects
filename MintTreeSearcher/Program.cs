@@ -1,9 +1,6 @@
 ﻿
 using MintForestBase;
 
-// Console.WriteLine("Enter auth token:");
-// var authToken = Console.ReadLine();
-
 var configs = new SettingsLoader();
 var contractInteraction = new SmartContractInteraction(configs.GetValue("PrivateKey"));
 
