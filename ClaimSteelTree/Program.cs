@@ -14,7 +14,7 @@ async Task DoClaim(HttpClient client, string id)
     var idNumber = Int32.Parse(id);
     
     var proofModel = await mintClient.GetProofSteal(idNumber);
-    if (proofModel != null)
+    if (proofModel is { Result.Amount: > 2500 })
     {
         var isDone = await contractInteraction.StealActionInteraction(proofModel);
         if (isDone)
