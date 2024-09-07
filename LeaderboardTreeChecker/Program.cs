@@ -55,7 +55,7 @@ try
     {
         Console.WriteLine($"PAGE {i}");
         tasks.Add(DoCheckLeaderboard(i));
-        await Task.Delay(2000);
+        await Task.Delay(1500);
     }
 
     await Task.WhenAll(tasks);
