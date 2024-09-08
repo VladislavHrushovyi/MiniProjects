@@ -1,22 +1,16 @@
 ﻿using MintForestBase;
 using MintForestBase.Models;
 
-Console.WriteLine("Enter auth token");
-var authToken = Console.ReadLine();
-
-var httpClients = new HttpClientFactory(authToken);
+var configs = new SettingsLoader();
+var contractInteraction = new SmartContractInteraction(configs.GetValue("PrivateKey"));
+var httpClients = new HttpClientFactory(configs.GetValue("AuthToken"));
 
 async Task DoCheckLeaderboard(int page)
 {
     
     var mintClient = new MintRequestSender(httpClients.GetDefaultHttpClient());
     var treesByPage = await mintClient.GetTreesByLeaderboardPage(page);
-    //await Task.Delay(Random.Shared.Next(250, 350));
-    // var clientsChunked = httpClients.HttpClients.Skip((page - 1) * 50)
-    //     .Take(50)
-    //     .ToArray();
     
-    var indexClient = 0;
     if (treesByPage.Result.Any())
     {
         IEnumerable<Task> tasks = treesByPage.Result.Select(x => DoClaim(httpClients.GetDefaultHttpClient(),x));
@@ -26,26 +20,28 @@ async Task DoCheckLeaderboard(int page)
 
 async Task DoClaim(HttpClient client, UserLeaderboard user)
 {
-    //int clientIndex = 0;
+    await Task.Delay(Random.Shared.Next(100, 500));
     var mintRequestSender = new MintRequestSender(client);
     var steelInfo = await mintRequestSender.GetNotClaimedMintTree(user.Id);
-    //clientIndex += 1;
     
-    await Task.Delay(Random.Shared.Next(200, 400));
     if (steelInfo.Result.Any())
     {
-        var validTree = steelInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 1000 });
+        var validTree = steelInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 2500 });
         if (validTree != default)
         {
             string output = $"https://www.mintchain.io/mint-forest?id={user.TreeId} ---> {validTree.Amount}ME";
             Console.WriteLine(validTree.Amount >= 1000 ? output +  " \t <<--- BINGO" : output);
             if (validTree.Amount >= 3000)
             {
-                mintRequestSender.ChangeHttpClient(httpClients.HttpClients[Random.Shared.Next(0, httpClients.HttpClients.Count - 1)]);
-                //mintRequestSender.ChangeHttpClient(clients[clientIndex]);
-                var steelingResult = await mintRequestSender.SteelTree(user.Id);
-                //await Task.Delay(Random.Shared.Next(200, 300));
-                Console.WriteLine($"STEELING treeId {user.TreeId} Amount {steelingResult.SteelInfo.Amount}");
+                var proofModel = await mintRequestSender.GetProofSteal(user.Id);
+                if (proofModel is {Result.Amount: > 4000})
+                {
+                    var isDone = await contractInteraction.StealActionInteraction(proofModel);
+                    if (isDone)
+                    {
+                        Console.WriteLine($"STEELING treeId {user.TreeId} Amount {proofModel.Result.Amount}");   
+                    }
+                }
             }
         }
     }
