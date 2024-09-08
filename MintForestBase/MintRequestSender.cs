@@ -37,7 +37,7 @@ public class MintRequestSender(HttpClient httpClient)
         }
         catch (Exception e)
         {
-            Console.WriteLine($"ERROR UserId {userId}");
+            Console.WriteLine($"ERROR UserId {userId}, {e.Message}");
         }
 
         return new Response() { Result = new ItemsTree[] { new ItemsTree() { Amount = 0, Stealable = false } } };
@@ -59,7 +59,7 @@ public class MintRequestSender(HttpClient httpClient)
         }
         catch (Exception e)
         {
-            Console.WriteLine($"ERROR TreeId {treeId}");
+            Console.WriteLine($"ERROR TreeId {treeId}, {e.Message}");
         }
 
         return new UserInfo() { Result = new Result() { Id = 0 } };
@@ -91,7 +91,7 @@ public class MintRequestSender(HttpClient httpClient)
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(e.Message);
             }
         }
 
@@ -114,7 +114,7 @@ public class MintRequestSender(HttpClient httpClient)
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Console.WriteLine(e.Message);
         }
 
         return new LeaderboardTrees() { Result = ArraySegment<UserLeaderboard>.Empty };
@@ -167,7 +167,7 @@ public class MintRequestSender(HttpClient httpClient)
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Console.WriteLine(e.Message);
         }
 
         return new ProofModel() { Result = new ProofResult() { Amount = 0, Tx = String.Empty } };

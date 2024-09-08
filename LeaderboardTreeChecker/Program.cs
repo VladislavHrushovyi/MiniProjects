@@ -26,7 +26,7 @@ async Task DoClaim(HttpClient client, UserLeaderboard user)
     
     if (steelInfo.Result.Any())
     {
-        var validTree = steelInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 1000 });
+        var validTree = steelInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 2500 });
         if (validTree != default)
         {
             string output = $"https://www.mintchain.io/mint-forest?id={user.TreeId} ---> {validTree.Amount}ME";
@@ -34,7 +34,7 @@ async Task DoClaim(HttpClient client, UserLeaderboard user)
             if (validTree.Amount >= 3000)
             {
                 var proofModel = await mintRequestSender.GetProofSteal(user.Id);
-                if (proofModel is {Result.Amount: > 3000})
+                if (proofModel is {Result.Amount: > 4000})
                 {
                     var isDone = await contractInteraction.StealActionInteraction(proofModel);
                     if (isDone)
