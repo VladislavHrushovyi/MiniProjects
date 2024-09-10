@@ -38,7 +38,7 @@ try
         var task = DoClaim(httpClientFactory.HttpClients[skip], id);
         tasks.Add(task);
         skip++;
-        await Task.Delay(150);
+        await Task.Delay(1000);
     }
 
     await Task.WhenAll(tasks);
