@@ -11,7 +11,6 @@ async Task DoFetchPage(int page)
     var mintClient = new MintRequestSender(httpClients.GetDefaultHttpClient());
     var treesByPage = await mintClient.GetTreesByLeaderboardPage(page);
     
-    var indexClient = 0;
     if (treesByPage.Result.Any())
     {
         IEnumerable<Task> tasks = treesByPage.Result.Select(x => DoCheckUser(httpClients.GetDefaultHttpClient(),x));
