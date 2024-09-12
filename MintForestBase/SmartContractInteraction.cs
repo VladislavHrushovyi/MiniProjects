@@ -26,8 +26,8 @@ public class SmartContractInteraction
         {
             var nonce = _web3.Eth.Transactions.GetTransactionCount.SendRequestAsync(_account.Address);
 
-            var gasPrice = Web3.Convert.ToWei(0.01, UnitConversion.EthUnit.Gwei);
-            var gasLimit = 100000;
+            var gasPrice = Web3.Convert.ToWei(0.001, UnitConversion.EthUnit.Gwei);
+            var gasLimit = 70000;
 
             var transactionInput = new TransactionInput()
             {
