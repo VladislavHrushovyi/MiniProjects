@@ -29,7 +29,7 @@ async Task DoSearch(HttpClient client, int treeId)
     
     if (claimableInfo.Result.Any())
     {
-        var validObj = claimableInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 100 });
+        var validObj = claimableInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 500 });
         if (validObj != default)
         {
             string output = $"https://www.mintchain.io/mint-forest?id={treeId} ---> {validObj.Amount}ME";
