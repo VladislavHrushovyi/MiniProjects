@@ -35,7 +35,7 @@ try
 
     foreach (var id in idsFromFile)
     {
-        var task = DoClaim(httpClientFactory.GetDefaultHttpClient(), id);
+        var task = DoClaim(httpClientFactory.HttpClients[skip], id);
         tasks.Add(task);
         skip++;
         await Task.Delay(1000);

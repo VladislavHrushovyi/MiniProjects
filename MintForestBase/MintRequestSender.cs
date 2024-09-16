@@ -19,12 +19,14 @@ public class MintRequestSender(HttpClient httpClient)
         }
 
         var uri = new Uri($"https://www.mintchain.io/api/tree/steal/energy-list?id={userId}");
-        string exOutputResponse = String.Empty;
         try
         {
             var response = await httpClient.GetAsync(uri);
             var jsonString = await response.Content.ReadAsStringAsync();
-            exOutputResponse = jsonString;
+            if(jsonString.Contains("Authentication", StringComparison.OrdinalIgnoreCase))
+            {
+                Console.WriteLine(jsonString);
+            }
             if (jsonString.Contains("else") || jsonString.Contains("owner"))
             {
                 return new Response()
@@ -38,7 +40,7 @@ public class MintRequestSender(HttpClient httpClient)
         }
         catch (Exception e)
         {
-            Console.WriteLine($"ERROR UserId {userId}, {e.Message} \t {exOutputResponse}");
+            Console.WriteLine($"ERROR UserId {userId}, {e.Message}");
         }
 
         return new Response() { Result = new ItemsTree[] { new ItemsTree() { Amount = 0, Stealable = false } } };
@@ -47,12 +49,14 @@ public class MintRequestSender(HttpClient httpClient)
     public async Task<UserInfo> GetUserInfo(int treeId)
     {
         var uri = new Uri($"https://www.mintchain.io/api/tree/user-info?treeid={treeId}");
-        string exOutputResponse = String.Empty;
         try
         {
             var response = await httpClient.GetAsync(uri);
             var jsonString = await response.Content.ReadAsStringAsync();
-            exOutputResponse = jsonString;
+            if(jsonString.Contains("Authentication", StringComparison.OrdinalIgnoreCase))
+            {
+                Console.WriteLine(jsonString);
+            }
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var objResult = JsonSerializer.Deserialize<UserInfo>(jsonString);
@@ -61,7 +65,7 @@ public class MintRequestSender(HttpClient httpClient)
         }
         catch (Exception e)
         {
-            Console.WriteLine($"ERROR TreeId {treeId}, {e.Message} \t {exOutputResponse}");
+            Console.WriteLine($"ERROR TreeId {treeId}, {e.Message}");
         }
 
         return new UserInfo() { Result = new Result() { Id = 0 } };
@@ -102,12 +106,14 @@ public class MintRequestSender(HttpClient httpClient)
     public async Task<LeaderboardTrees> GetTreesByLeaderboardPage(int page)
     {
         var uri = new Uri($"https://www.mintchain.io/api/tree/leaderboard?page={page}");
-        string exOutputResponse = String.Empty;
         try
         {
             var response = await httpClient.GetAsync(uri);
             var jsonString = await response.Content.ReadAsStringAsync();
-            exOutputResponse = jsonString;
+            if(jsonString.Contains("Authentication", StringComparison.OrdinalIgnoreCase))
+            {
+                Console.WriteLine(jsonString);
+            }
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var result = JsonSerializer.Deserialize<LeaderboardTrees>(jsonString);
@@ -117,7 +123,7 @@ public class MintRequestSender(HttpClient httpClient)
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.Message + $"\t {exOutputResponse}");
+            Console.WriteLine(e.Message);
         }
 
         return new LeaderboardTrees() { Result = ArraySegment<UserLeaderboard>.Empty };
@@ -126,12 +132,14 @@ public class MintRequestSender(HttpClient httpClient)
     public async Task<UserActivity> GetUserActivity(int treeId)
     {
         var uri = new Uri($"https://www.mintchain.io/api/tree/activity?page=1&treeid={treeId}");
-        string exOutputResponse = String.Empty;
         try
         {
             var response = await httpClient.GetAsync(uri);
             var jsonString = await response.Content.ReadAsStringAsync();
-            exOutputResponse = jsonString;
+            if(jsonString.Contains("Authentication", StringComparison.OrdinalIgnoreCase))
+            {
+                Console.WriteLine(jsonString);
+            }
             if (response.IsSuccessStatusCode)
             {
                 var result = JsonSerializer.Deserialize<UserActivity>(jsonString);
@@ -140,7 +148,7 @@ public class MintRequestSender(HttpClient httpClient)
         }
         catch (Exception e)
         { 
-            Console.WriteLine(e.Message + $"\t {exOutputResponse}");
+            Console.WriteLine(e.Message);
         }
 
         return new UserActivity()
@@ -158,12 +166,14 @@ public class MintRequestSender(HttpClient httpClient)
     public async Task<ProofModel> GetProofSteal(int userId)
     {
         var uri = new Uri($"https://www.mintchain.io/api/tree/get-forest-proof?type=Steal&id={userId}");
-        string exOutputResponse = String.Empty;
         try
         {
             var response = await httpClient.GetAsync(uri);
             var jsonString = await response.Content.ReadAsStringAsync();
-            exOutputResponse = jsonString;
+            if(jsonString.Contains("Authentication", StringComparison.OrdinalIgnoreCase))
+            {
+                Console.WriteLine(jsonString);
+            }
             if (response.IsSuccessStatusCode)
             {
                 var result = JsonSerializer.Deserialize<ProofModel>(jsonString);
@@ -172,7 +182,7 @@ public class MintRequestSender(HttpClient httpClient)
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.Message + $"\t {exOutputResponse}");
+            Console.WriteLine(e.Message);
         }
 
         return new ProofModel() { Result = new ProofResult() { Amount = 0, Tx = String.Empty } };
