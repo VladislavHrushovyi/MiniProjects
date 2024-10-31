@@ -31,10 +31,10 @@ async Task DoClaim(HttpClient client, UserLeaderboard user)
         {
             string output = $"https://www.mintchain.io/mint-forest?id={user.TreeId} ---> {validTree.Amount}ME";
             Console.WriteLine(validTree.Amount >= 1000 ? output +  " \t <<--- BINGO" : output);
-            if (validTree.Amount >= 3000)
+            if (validTree.Amount >= 40000)
             {
                 var proofModel = await mintRequestSender.GetProofSteal(user.Id);
-                if (proofModel is {Result.Amount: > 4000})
+                if (proofModel is {Result.Amount: > 40000})
                 {
                     var isDone = await contractInteraction.StealActionInteraction(proofModel);
                     if (isDone)
