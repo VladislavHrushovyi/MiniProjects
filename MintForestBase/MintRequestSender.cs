@@ -109,6 +109,7 @@ public class MintRequestSender(HttpClient httpClient)
         try
         {
             var response = await httpClient.GetAsync(uri);
+            Console.WriteLine($"Trees by leaderboard page: {page} - status: {response.StatusCode}");
             var jsonString = await response.Content.ReadAsStringAsync();
             if(jsonString.Contains("Authentication", StringComparison.OrdinalIgnoreCase))
             {
@@ -170,6 +171,7 @@ public class MintRequestSender(HttpClient httpClient)
         {
             var response = await httpClient.GetAsync(uri);
             var jsonString = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"{jsonString[..(jsonString.Length / 2)]}");
             if(jsonString.Contains("Authentication", StringComparison.OrdinalIgnoreCase))
             {
                 Console.WriteLine(jsonString);

@@ -1,4 +1,6 @@
-﻿using MintForestBase.Models;
+﻿using MintForestBase.FunctionMessagesModels;
+using MintForestBase.Models;
+using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Util;
@@ -56,5 +58,26 @@ public class SmartContractInteraction
 
             return true;   
         }
+    }
+
+    public async Task<bool> StealActionInteraction2(ProofModel proofModel, string targetAddress)
+    {
+        var stealFunction = new StealFunction()
+        {
+            Params = new StealParams()
+            {
+                Point = proofModel.Result.Amount,
+                Target = targetAddress,
+                Time = (ulong)DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds
+            },
+            Signature = proofModel.Result.Tx.HexToByteArray(),
+            Gas = new HexBigInteger(100000),
+        };
+
+        var handler = _web3.Eth.GetContractTransactionHandler<StealFunction>();
+
+        var receipt = await handler.SendRequestAndWaitForReceiptAsync(ContractAddress, stealFunction);
+        Console.WriteLine($"receipt: {receipt.TransactionHash} tx, {receipt.Status} status");
+        return true;
     }
 }
