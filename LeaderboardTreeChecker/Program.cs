@@ -34,7 +34,7 @@ async Task DoClaim(HttpClient client, UserLeaderboard user)
             if (validTree.Amount >= 40000)
             {
                 var proofModel = await mintRequestSender.GetProofSteal(user.Id);
-                if (proofModel is {Result.Amount: > 40000})
+                if (proofModel is {Result.Amount: > 50000})
                 {
                     var isDone = await contractInteraction.StealActionInteraction(proofModel);
                     if (isDone)
