@@ -19,3 +19,10 @@ public class ActivityItem
     [JsonPropertyName("claimAt")]
     public DateTime ClaimAt { get; set; }
 }
+
+public class UserActivityDTO
+{
+    public string Id { get; set; }
+    public string TreeId { get; set; }
+    public string Amount { get; set; }
+}

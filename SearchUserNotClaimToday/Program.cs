@@ -6,19 +6,23 @@ var configs = new SettingsLoader();
 var fileWriter = new FindTreeFileManager("IdsNotClaimedToday.txt");
 var httpClients = new HttpClientFactory(configs.GetValue("AuthToken"));
 
-async Task DoFetchPage(int page)
+async Task<List<UserActivityDTO>> DoFetchPage(int page)
 {
     var mintClient = new MintRequestSender(httpClients.GetDefaultHttpClient());
     var treesByPage = await mintClient.GetTreesByLeaderboardPage(page);
     
     if (treesByPage.Result.Any())
     {
-        IEnumerable<Task> tasks = treesByPage.Result.Select(x => DoCheckUser(httpClients.GetDefaultHttpClient(),x));
-        await Task.WhenAll(tasks);
+        var tasks = treesByPage.Result.Select(x => DoCheckUser(httpClients.GetDefaultHttpClient(),x));
+        var results = await Task.WhenAll(tasks);
+
+        return results.Where(x => x != null).ToList();
     }
+
+    return new List<UserActivityDTO>();
 }
 
-async Task DoCheckUser(HttpClient client, UserLeaderboard user)
+async Task<UserActivityDTO> DoCheckUser(HttpClient client, UserLeaderboard user)
 {
     var mintRequestSender = new MintRequestSender(client);
 
@@ -27,17 +31,25 @@ async Task DoCheckUser(HttpClient client, UserLeaderboard user)
     if (activitiesList.Result.Any())
     {
         var firstDaily = activitiesList.Result.FirstOrDefault(x => x.Type == "daily");
-        if (firstDaily != default && firstDaily.ClaimAt.Date != DateTime.Now.Date && firstDaily.Amount > 8000)
+        if (firstDaily != null && firstDaily.ClaimAt.Date != DateTime.Now.Date && firstDaily.Amount > 8000)
         {
             Console.WriteLine($"{user.TreeId} -- {firstDaily.Amount}ME");
-            fileWriter.AppendLine($"UserId = {user.Id} -- TreeId = {user.TreeId} -- {firstDaily.Amount}ME \n");
+            return new UserActivityDTO()
+            {
+                Id = user.Id.ToString(),
+                TreeId = user.TreeId.ToString(),
+                Amount = firstDaily.Amount.ToString(),
+            };
+            //fileWriter.AppendLine($"UserId = {user.Id} -- TreeId = {user.TreeId} -- {firstDaily.Amount}ME \n");
         }
     }
+
+    return null;
 }
 
 try
 {
-    List<Task> tasks = new List<Task>();
+    List<Task<List<UserActivityDTO>>> tasks = new List<Task<List<UserActivityDTO>>>();
     
     for (int i = 1; i <= 20; i++)
     {
@@ -46,7 +58,12 @@ try
         await Task.Delay(500);
     }
 
-    await Task.WhenAll(tasks);
+    var users = await Task.WhenAll(tasks);
+    var allUsers = users.SelectMany(x => x.Select(user => user))
+        .OrderByDescending(x => Int32.Parse(x.Amount))
+        .ToList();
+
+    fileWriter.WriteUsers(allUsers);
 }
 catch (Exception e)
 {

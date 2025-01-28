@@ -68,12 +68,13 @@ public class SmartContractInteraction
             {
                 Point = proofModel.Result.Amount,
                 Target = targetAddress,
-                Time = (ulong)DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds
+                Time = (ulong)DateTime.Now.Subtract(new DateTime(1970, 1, 1, 0,0,0)).TotalSeconds
             },
             Signature = proofModel.Result.Tx.HexToByteArray(),
+            FromAddress = _account.Address,
             Gas = new HexBigInteger(100000),
+            GasPrice = new HexBigInteger(100000),
         };
-
         var handler = _web3.Eth.GetContractTransactionHandler<StealFunction>();
 
         var receipt = await handler.SendRequestAndWaitForReceiptAsync(ContractAddress, stealFunction);
