@@ -29,7 +29,7 @@ async Task DoSearch(HttpClient client, int treeId)
     
     if (claimableInfo.Result.Any())
     {
-        var validObj = claimableInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 500 });
+        var validObj = claimableInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 5000 });
         if (validObj != default)
         {
             string output = $"https://www.mintchain.io/mint-forest?id={treeId} ---> {validObj.Amount}ME";
@@ -41,7 +41,7 @@ async Task DoSearch(HttpClient client, int treeId)
                 if (!string.IsNullOrWhiteSpace(proofModel.Result.Tx))
                 {
                     string line = $"https://www.mintchain.io/mint-forest?id={treeId} ---> {validObj.Amount}ME \n";
-                    var isDone = await contractInteraction.StealActionInteraction2(proofModel, userInfo.Result.Address);
+                    var isDone = await contractInteraction.StealActionInteraction(proofModel);
                     if (isDone)
                     {
                         Console.WriteLine($"Tree ${treeId} stolen. Amount {proofModel.Result.Amount}");
@@ -55,20 +55,19 @@ async Task DoSearch(HttpClient client, int treeId)
 
 async Task DoSearchChunk(HttpClient client, IEnumerable<int> treeIds)
 {
-    // foreach (var treeId in treeIds)
-    // {
-    //     await DoSearch(client, treeId);
-    // }
+    foreach (var treeId in treeIds)
+    {
+        await DoSearch(client, treeId);
+    }
 }
 
 try
 {
-    await DoSearch(httpClientsFactory.GetDefaultHttpClient(), 31233);
-    // int amountIds = to - from;
-    // var tasks = Enumerable.Range(from, amountIds)
-    //     .Chunk(amountIds / 100)
-    //     .Select(x => DoSearchChunk(httpClientsFactory.GetDefaultHttpClient(), x));
-    // await Task.WhenAll(tasks);
+    int amountIds = to - from;
+    var tasks = Enumerable.Range(from, amountIds)
+        .Chunk(amountIds / 100)
+        .Select(x => DoSearchChunk(httpClientsFactory.GetDefaultHttpClient(), x));
+    await Task.WhenAll(tasks);
 }
 catch (Exception e)
 {

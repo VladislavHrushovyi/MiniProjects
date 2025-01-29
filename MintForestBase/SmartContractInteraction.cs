@@ -3,6 +3,7 @@ using MintForestBase.Models;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
+using Nethereum.RPC.TransactionReceipts;
 using Nethereum.Util;
 using Nethereum.Web3;
 using Nethereum.Web3.Accounts;
@@ -28,7 +29,7 @@ public class SmartContractInteraction
         {
             var nonce = _web3.Eth.Transactions.GetTransactionCount.SendRequestAsync(_account.Address);
 
-            var gasPrice = Web3.Convert.ToWei(0.05, UnitConversion.EthUnit.Gwei);
+            var gasPrice = _web3.Eth.GasPrice.SendRequestAsync();
             var gasLimit = 100000;
 
             var transactionInput = new TransactionInput()
@@ -37,7 +38,7 @@ public class SmartContractInteraction
                 To = ContractAddress,
                 Data = proofModel.Result.Tx,
                 Gas = new HexBigInteger(gasLimit),
-                GasPrice = new HexBigInteger(gasPrice),
+                GasPrice = new HexBigInteger(gasPrice.Result),
                 Nonce = new HexBigInteger(nonce.Result)
             };
 
@@ -49,7 +50,11 @@ public class SmartContractInteraction
                 var rawTransaction = transactionSigner.SignTransaction(_account, transactionInput, chainId);
 
                 var txHash = _web3.Eth.Transactions.SendRawTransaction.SendRequestAsync("0x" + rawTransaction);
-                Console.WriteLine($"Transaction Hash: {txHash.Result}");
+                
+                var receiptPollingService = new TransactionReceiptPollingService(_web3.TransactionManager, 50000);
+                var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(30));
+                var transactionReceipt = receiptPollingService.PollForReceiptAsync(txHash.GetAwaiter().GetResult(), cancellationTokenSource.Token);
+                Console.WriteLine($"Transaction Hash: {transactionReceipt.Result} -- {transactionReceipt.Status}");
             }
             catch (Exception ex)
             {

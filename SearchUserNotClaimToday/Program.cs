@@ -6,7 +6,7 @@ var configs = new SettingsLoader();
 var fileWriter = new FindTreeFileManager("IdsNotClaimedToday.txt");
 var httpClients = new HttpClientFactory(configs.GetValue("AuthToken"));
 
-async Task<List<UserActivityDTO>> DoFetchPage(int page)
+async Task<List<UserActivityDTO?>> DoFetchPage(int page)
 {
     var mintClient = new MintRequestSender(httpClients.GetDefaultHttpClient());
     var treesByPage = await mintClient.GetTreesByLeaderboardPage(page);
@@ -19,10 +19,10 @@ async Task<List<UserActivityDTO>> DoFetchPage(int page)
         return results.Where(x => x != null).ToList();
     }
 
-    return new List<UserActivityDTO>();
+    return new List<UserActivityDTO>()!;
 }
 
-async Task<UserActivityDTO> DoCheckUser(HttpClient client, UserLeaderboard user)
+async Task<UserActivityDTO?> DoCheckUser(HttpClient client, UserLeaderboard user)
 {
     var mintRequestSender = new MintRequestSender(client);
 
@@ -54,7 +54,7 @@ try
     for (int i = 1; i <= 20; i++)
     {
         Console.WriteLine($"PAGE {i}");
-        tasks.Add(DoFetchPage(i));
+        tasks.Add(DoFetchPage(i)!);
         await Task.Delay(500);
     }
 
