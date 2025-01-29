@@ -1,4 +1,6 @@
-﻿namespace MintForestBase;
+﻿using MintForestBase.Models;
+
+namespace MintForestBase;
 
 public class FindTreeFileManager
 {
@@ -17,6 +19,12 @@ public class FindTreeFileManager
                 File.Delete(_fileName);
             }
         }
+    }
+
+    public void WriteUsers(IEnumerable<UserActivityDTO> users)
+    {
+        var lines = users.Select(x => $"Id: {x.Id} \t TreeId: {x.TreeId} \t Amount: {x.Amount}");
+        File.AppendAllLines(_fileName, lines);
     }
 
     public void AppendLine(string data)

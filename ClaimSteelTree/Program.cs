@@ -7,9 +7,14 @@ var idsFromFile = File.ReadAllLines("./Ids.txt");
 
 HttpClientFactory httpClientFactory = new HttpClientFactory(configs.GetValue("AuthToken"));
 
-Console.WriteLine("Press any button to start...");
-Console.ReadKey();
-
+var dateTimeNow = DateTime.Now;
+var deadLineTime = DateTime.Parse($"{dateTimeNow.Year}-{dateTimeNow.Month}-{dateTimeNow.Day} {14}:{00}:{00}");
+while (DateTime.Now < deadLineTime)
+{
+    Console.Clear();
+    await Task.Delay(100);
+    Console.WriteLine(DateTime.Now.ToString("HH:mm:ss"));
+}
 async Task DoClaim(HttpClient client, string id)
 {
     MintRequestSender mintClient = new MintRequestSender(client);
