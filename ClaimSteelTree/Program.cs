@@ -15,7 +15,9 @@ var idsFromFile = File.ReadAllLines("./Ids.txt");
 HttpClientFactory httpClientFactory = new HttpClientFactory(configs.GetValue("AuthToken"));
 
 var dateTimeNow = DateTime.UtcNow;
-var deadLineTime = DateTime.Parse($"{dateTimeNow.Year}-{dateTimeNow.Month}-{dateTimeNow.Day} {14}:{00}:{00}").AddMilliseconds(-200).ToUniversalTime();
+var deadLineTime = DateTime.Parse($"{dateTimeNow.Year}-{dateTimeNow.Month}-{dateTimeNow.Day} {14}:{00}:{00}")
+    .AddMilliseconds(-200)
+    .ToUniversalTime();
 while (DateTime.UtcNow < deadLineTime)
 {
     Console.Clear();
