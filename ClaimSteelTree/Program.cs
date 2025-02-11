@@ -1,5 +1,12 @@
 ﻿using MintForestBase;
-
+//var dateTimeNow = DateTime.UtcNow;
+// var deadLineTime = DateTime.Parse($"{dateTimeNow.Year}-{dateTimeNow.Month}-{dateTimeNow.Day} {14}:{00}:{00}").AddMilliseconds(-200).ToUniversalTime();
+// while (DateTime.UtcNow < deadLineTime)
+// {
+//     Console.Clear();
+//     Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss") + $" Target {deadLineTime:HH:mm:ss}");
+//     await Task.Delay(10);
+// }
 var configs = new SettingsLoader();
 var contractInteraction = new SmartContractInteraction(configs.GetValue("PrivateKey"));
 
@@ -7,14 +14,17 @@ var idsFromFile = File.ReadAllLines("./Ids.txt");
 
 HttpClientFactory httpClientFactory = new HttpClientFactory(configs.GetValue("AuthToken"));
 
-var dateTimeNow = DateTime.Now;
-var deadLineTime = DateTime.Parse($"{dateTimeNow.Year}-{dateTimeNow.Month}-{dateTimeNow.Day} {14}:{00}:{00}");
-while (DateTime.Now < deadLineTime)
+var dateTimeNow = DateTime.UtcNow;
+var deadLineTime = DateTime.Parse($"{dateTimeNow.Year}-{dateTimeNow.Month}-{dateTimeNow.Day} {14}:{00}:{00}")
+    .AddMilliseconds(-200)
+    .ToUniversalTime();
+while (DateTime.UtcNow < deadLineTime)
 {
     Console.Clear();
-    await Task.Delay(100);
-    Console.WriteLine(DateTime.Now.ToString("HH:mm:ss"));
+    Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss") + $" Target {deadLineTime:HH:mm:ss}");
+    await Task.Delay(10);
 }
+
 async Task DoClaim(HttpClient client, string id)
 {
     MintRequestSender mintClient = new MintRequestSender(client);
@@ -22,7 +32,7 @@ async Task DoClaim(HttpClient client, string id)
     var idNumber = Int32.Parse(id);
     
     var proofModel = await mintClient.GetProofSteal(idNumber);
-    if (proofModel is { Result.Amount: > 45000 })
+    if (proofModel is { Result.Amount: > 55000 })
     {
         Console.WriteLine($"Proof {proofModel.Result.Tx.Substring(0, 30)} {proofModel.Result.Amount}ME");
         var isDone = await contractInteraction.StealActionInteraction(proofModel);

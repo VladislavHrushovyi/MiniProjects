@@ -34,7 +34,7 @@ async Task DoClaim(HttpClient client, UserLeaderboard user)
             if (validTree.Amount >= 40000)
             {
                 var proofModel = await mintRequestSender.GetProofSteal(user.Id);
-                if (proofModel is {Result.Amount: > 50000})
+                if (proofModel is {Result.Amount: > 80000})
                 {
                     var isDone = await contractInteraction.StealActionInteraction(proofModel);
                     if (isDone)
@@ -49,6 +49,16 @@ async Task DoClaim(HttpClient client, UserLeaderboard user)
 
 try
 {
+    var dateTimeNow = DateTime.UtcNow;
+    var deadLineTime = DateTime.Parse($"{dateTimeNow.Year}-{dateTimeNow.Month}-{dateTimeNow.Day} {14}:{00}:{00}")
+        .AddMilliseconds(-200)
+        .ToUniversalTime();
+    while (DateTime.UtcNow < deadLineTime)
+    {
+        Console.Clear();
+        Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss") + $" Target {deadLineTime:HH:mm:ss}");
+        await Task.Delay(10);
+    }
     List<Task> tasks = new List<Task>();
     
     for (int i = 1; i <= 20; i++)

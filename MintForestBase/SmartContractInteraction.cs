@@ -51,10 +51,10 @@ public class SmartContractInteraction
 
                 var txHash = _web3.Eth.Transactions.SendRawTransaction.SendRequestAsync("0x" + rawTransaction);
                 
-                var receiptPollingService = new TransactionReceiptPollingService(_web3.TransactionManager, 50000);
+                var receiptPollingService = new TransactionReceiptPollingService(_web3.TransactionManager, 500);
                 var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(30));
                 var transactionReceipt = receiptPollingService.PollForReceiptAsync(txHash.GetAwaiter().GetResult(), cancellationTokenSource.Token);
-                Console.WriteLine($"Transaction Hash: {transactionReceipt.Result} -- {transactionReceipt.Status}");
+                Console.WriteLine($"Transaction Hash: {transactionReceipt.Result.TransactionHash} -- {transactionReceipt.Result.Status}");
             }
             catch (Exception ex)
             {
