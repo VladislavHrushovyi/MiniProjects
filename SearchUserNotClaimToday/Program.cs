@@ -102,7 +102,7 @@ try
     {
         var task = DoClaim(httpClients.GetDefaultHttpClient(), user.Id);
         steelTasks.Add(task);
-        await Task.Delay(1000);
+        await Task.Delay(150);
     }
     await Task.WhenAll(steelTasks);
 }
