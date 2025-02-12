@@ -16,6 +16,7 @@ public class SmartContractInteraction
     private readonly Account _account;
     private readonly Web3 _web3;
     private const string ContractAddress = "0x12906892AaA384ad59F2c431867af6632c68100a";
+    private static int AmountSuccesTransaction = 0;
     public SmartContractInteraction(string privateKey)
     {
         string rpcUrl = "https://rpc.mintchain.io";
@@ -27,6 +28,7 @@ public class SmartContractInteraction
     {
         lock (_lock)
         {
+            if (AmountSuccesTransaction >= 8) return false;
             var nonce = _web3.Eth.Transactions.GetTransactionCount.SendRequestAsync(_account.Address);
 
             var gasPrice = _web3.Eth.GasPrice.SendRequestAsync();
@@ -53,8 +55,14 @@ public class SmartContractInteraction
                 
                 var receiptPollingService = new TransactionReceiptPollingService(_web3.TransactionManager, 500);
                 var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(30));
-                var transactionReceipt = receiptPollingService.PollForReceiptAsync(txHash.GetAwaiter().GetResult(), cancellationTokenSource.Token);
-                Console.WriteLine($"Transaction Hash: {transactionReceipt.Result.TransactionHash} -- {transactionReceipt.Result.Status}");
+                var transactionReceipt = receiptPollingService
+                    .PollForReceiptAsync(txHash.GetAwaiter().GetResult(), cancellationTokenSource.Token)
+                    .GetAwaiter().GetResult();
+                Console.WriteLine($"Transaction Hash: {transactionReceipt.TransactionHash} -- {transactionReceipt.Status}");
+                if (transactionReceipt.Status.Value == 1)
+                {
+                    Interlocked.Increment(ref AmountSuccesTransaction);
+                }
             }
             catch (Exception ex)
             {
