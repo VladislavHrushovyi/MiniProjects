@@ -88,7 +88,7 @@ try
     
     var dateTimeNow = DateTime.UtcNow;
     var deadLineTime = DateTime.Parse($"{dateTimeNow.Year}-{dateTimeNow.Month}-{dateTimeNow.Day} {14}:{00}:{00}")
-        .AddMilliseconds(-200)
+        .AddMilliseconds(-500)
         .ToUniversalTime();
     while (DateTime.UtcNow < deadLineTime)
     {
@@ -102,7 +102,7 @@ try
     {
         var task = DoClaim(httpClients.GetDefaultHttpClient(), user.Id);
         steelTasks.Add(task);
-        await Task.Delay(150);
+        await Task.Delay(50);
     }
     await Task.WhenAll(steelTasks);
 }
