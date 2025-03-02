@@ -20,13 +20,13 @@ async Task DoCheckLeaderboard(int page)
 
 async Task DoClaim(HttpClient client, UserLeaderboard user)
 {
-    await Task.Delay(Random.Shared.Next(100, 500));
+    await Task.Delay(Random.Shared.Next(100, 200));
     var mintRequestSender = new MintRequestSender(client);
     var steelInfo = await mintRequestSender.GetNotClaimedMintTree(user.Id);
     
     if (steelInfo.Result.Any())
     {
-        var validTree = steelInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 2500 });
+        var validTree = steelInfo.Result.FirstOrDefault(x => x is { Stealable: true, Amount: >= 40000 });
         if (validTree != default)
         {
             string output = $"https://www.mintchain.io/mint-forest?id={user.TreeId} ---> {validTree.Amount}ME";
@@ -65,7 +65,7 @@ try
     {
         Console.WriteLine($"PAGE {i}");
         tasks.Add(DoCheckLeaderboard(i));
-        await Task.Delay(1500);
+        await Task.Delay(100);
     }
 
     await Task.WhenAll(tasks);
