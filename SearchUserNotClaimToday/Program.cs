@@ -32,7 +32,7 @@ async Task<UserActivityDTO?> DoCheckUser(HttpClient client, UserLeaderboard user
     if (activitiesList.Result.Any())
     {
         var firstDaily = activitiesList.Result.FirstOrDefault(x => x.Type == "daily");
-        if (firstDaily != null && firstDaily.ClaimAt.Date != DateTime.Now.Date && firstDaily.Amount > 8000)
+        if (firstDaily != null && firstDaily.ClaimAt.Date != DateTime.Now.Date && firstDaily.Amount > 80000)
         {
             Console.WriteLine($"{user.TreeId} -- {firstDaily.Amount}ME");
             return new UserActivityDTO()
@@ -55,7 +55,7 @@ async Task DoClaim(HttpClient client, string id)
     var idNumber = Int32.Parse(id);
     
     var proofModel = await mintClient.GetProofSteal(idNumber);
-    if (proofModel is { Result.Amount: > 55000 })
+    if (proofModel is { Result.Amount: > 70000 })
     {
         Console.WriteLine($"Proof {proofModel.Result.Tx.Substring(0, 30)} {proofModel.Result.Amount}ME");
         var isDone = await contract.StealActionInteraction(proofModel);
